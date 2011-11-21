@@ -3,8 +3,9 @@
 #include <sstream>
 #include <random>
 #include <numeric>
-#include <memory>
+#include <numerical/matrix.hpp>
 using namespace std;
+using namespace numerical;
 
 void parse_args(const int argc, const char *const *const argv,
                 size_t &n, size_t &m)
@@ -57,64 +58,6 @@ void free_matrix(T** D, const size_t n)
 	delete[] D;
 }
 
-template <typename T>
-class Block {
-public:
-	typedef T value_type;
-
-public:
-	Block(const size_t n)
-		: _n(n), _data(new T[n])
-	{}
-
-	~Block() {delete[] _data;}
-	
-	Block(const Block&) = delete;
-	Block(const Block&&) = delete;
-	Block& operator=(const Block&) = delete;
-	Block& operator=(const Block&&) = delete;
-
-	T operator[](const size_t i) const 
-	{ 
-		return _data[i]; 
-	}
-
-	T operator[](const size_t i) 
-	{ 
-		return _data[i]; 
-	}
-	
-private:
-	size_t _n;
-	T* _data;
-};
-
-template <typename T>
-class Matrix {
-public:
-	typedef T value_type;
-
-public:
-	Matrix(const size_t n) 
-		: _rows(n), _cols(n), 
-			_data(new Block<T>(n*n))
-	{
-	}
-
-	Matrix(const size_t rows, const size_t cols)
-		: _rows(rows), _cols(cols),
-			_data(new Block<T>(rows * cols))
-	{
-	}
-
-	T operator()(const size_t row, const size_t col) const
-	{return _data.get()[row * _rows][col];}
-	
-private:
-	size_t _rows, _cols;
-	unique_ptr<Block<T>> _data;
-};
-
 int main(int argc, char **argv)
 {
   size_t n = 0 , m = 0;
@@ -128,15 +71,14 @@ int main(int argc, char **argv)
 
   printf("Running simultaion with %u electrons for %u steps\n", n, m);
 	//D = std::move(generate_random_matrix<float>(n));
-	Matrix<float> D(n);
+	Matrix<float> D = random(n);
 
 	for (size_t i = 0; i < n; ++i) {
 		for (size_t j = 0; j < n; ++j) {
-			cout << D(i,j) << " ";
+			//cout << D(i,j) << " ";
 		}
-		cout << "\n";
+		//cout << "\n";
 	}
 
   return 0;
 }
-

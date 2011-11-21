@@ -1,0 +1,34 @@
+#ifndef NUMERICAL_MATRIX_HPP
+#define NUMERICAL_MATRIX_HPP
+
+namespace numerical {
+
+	template <typename T,
+						typename OuterAllocator = std::allocator<T*>,
+						typename InnerAllocator = std::allocator<T> >
+	class Matrix {
+	public:
+		typedef T value_type;
+		typedef OuterAllocator outer_allocator_type;
+		typedef InnerAllocator inner_allocator_type;
+
+	public:
+		Matrix(const size_t n);
+		Matrix(const size_t rows, const size_t cols);
+		~Matrix();
+	
+		T operator()(const size_t row, const size_t col);
+		T operator()(const size_t row, const size_t col) const;
+
+	private:
+		size_t _rows, _cols;
+		T** _data;
+		static outer_allocator_type outer_allocator;
+		static inner_allocator_type inner_allocator;
+	};
+
+}
+
+#include "matrix.cpp"
+
+#endif
