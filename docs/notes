@@ -1,0 +1,44 @@
+Input: N electrons
+
+// spin is either 1/2 or -1/2
+struct electron {
+  float x,y,z,spin;
+};
+
+Algorithm:
+D[k+1] = D[k] + e[p[k]] . v'[k]
+- where e is a vector with 0 in all slots except p
+  where p is a vector mapping iteration through k to p
+  where D is the determinant function of an N * N matrix
+  where N is the number of electrons
+
+determinant(matrix) :: Matrix -> Float
+trial_wave(electron) :: Electron -> Float
+trial_wave(vector) :: [Electron] -> [Float]
+
+R[k] = D[k+1] / D[k]
+
+more efficiently:
+R[k] = (1 + v'[k] . inverse(D[k]) . e[p[k]])
+
+
+Sherman Morrison :: Matrix -> Float
+-- O(N^2)
+inv(D[k+1]) = inv(D[k]) - (inv(D[k]) . e[p[k]] . v'[k] . inv(D[k]))/
+              (1 + v'[k] . inv(D[k]) . e[p[k]] )
+
+Fast Slater :: Matrix -> Float
+-- O(n log_2 n)
+inv(D[k+1]) = foldl(X, multiply, 1) * inv(D[0])
+  where X = (I - gamma[j] * u[j] * v'[j])
+        gamma = 1 / R[k]
+        u[k] = inv(D[k]) . e[p[k]] 
+
+
+metropolis accept :: Float -> Bool
+return D(R') / D(R) > threshold
+
+Notes:
+* Store all D[k] calculated so far
+* Store all R[k] calculated so far
+
