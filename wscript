@@ -1,8 +1,8 @@
 from os.path import join as path_join
 from os.path import basename as basename
 from os import listdir as os_listdir
-appname = 'fast-slater-determinant'
-version = '0.1'
+APPNAME = 'fast-slater-determinant'
+VERSION = '0.1'
 
 AMD_OPENCL_PATH = '/opt/AMDAPP/include'
 NEEDED_TR1_LIBS = frozenset(['random', 'numeric',
@@ -29,7 +29,7 @@ def configure(cfg):
 
   cfg.load('compiler_cxx waf_unit_test')
 
-  cfg.define('FSD_VERSION', version)
+  cfg.define('FSD_VERSION', VERSION)
 
   # mandatory libraries
   cfg.check_cxx(lib='gsl', errmsg='Download and install GNU Scientific Library.')
