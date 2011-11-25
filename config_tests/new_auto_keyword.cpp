@@ -7,4 +7,4 @@ int main() {
   for(auto iter = v.begin(), end = v.end(); iter != end; ++iter);
 
   return 0;
-}  
+}
