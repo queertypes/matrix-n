@@ -2,3 +2,4 @@ build
 lib
 .lock*
 *~
+include/config.h
