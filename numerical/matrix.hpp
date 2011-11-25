@@ -15,16 +15,37 @@ namespace numerical {
 	public:
 		Matrix(const size_t n);
 		Matrix(const size_t rows, const size_t cols);
+		Matrix(const Matrix& other);
 		~Matrix();
-	
+
+		Matrix(const Matrix&& other);
+		Matrix& operator=(const Matrix&& other);
+		
+		Matrix& operator=(const Matrix& other);
+
+		Matrix& operator+=(const Matrix& other);
+		Matrix& operator-=(const Matrix& other);
+		Matrix& operator*=(const Matrix& other);
+
+		Matrix& operator+=(const T other);
+		Matrix& operator-=(const T other);
+		Matrix& operator*=(const T other);
+
 		T operator()(const size_t row, const size_t col);
 		T operator()(const size_t row, const size_t col) const;
 
+	public:
+		T** data() const;
+		size_t rows() const;
+		size_t cols() const;
+		outer_allocator_type get_out_allocator() constexpr;
+		inner_allocator_type get_inner_allocator() constexpr;
+		
 	private:
 		size_t _rows, _cols;
 		T** _data;
-		static outer_allocator_type outer_allocator;
-		static inner_allocator_type inner_allocator;
+		static outer_allocator_type _outer_allocator;
+		static inner_allocator_type _inner_allocator;
 	};
 
 }

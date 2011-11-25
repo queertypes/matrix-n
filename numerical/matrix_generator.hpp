@@ -4,26 +4,28 @@
 namespace numerical {
 
 	template <class Matrix>
-	Matrix eye(const size_t n);
+	class IdentityMatrixGenerator {
+		Matrix operator()(const size_t n) const;
+	};
+
+	template <class Matrix, size_t Value>
+	class ValueMatrixGenerator {
+		Matrix operator()(const size_t n) const;
+		Matrix operator()(const size_t rows, const size_t cols) const;
+	};
 
 	template <class Matrix>
-	Matrix ones(const size_t n);
-
-	template <class Matrix>
-	Matrix ones(const size_t rows, const size_t cols);
-
-	template <class Matrix>
-	Matrix zeros(const size_t n);
-
-	template <class Matrix>
-	Matrix zeros(const size_t rows, const size_t cols);
+	class RandomMatrixGenerator {
+		Matrix operator()(const size_t n) const;
+		Matrix operator()(const size_t rows, const size_t cols) const;
+	};
 
 	template <class Matrix>
 	Matrix random(const size_t n);
 
 	template <class Matrix>
 	Matrix random(const size_t rows, const size_t cols);
-
+	
 	template <typename T,
 						typename Matrix,
 						typename Generator>
@@ -31,5 +33,7 @@ namespace numerical {
 		void generate(Matrix &);
 	};
 }
+
+
 
 #endif
