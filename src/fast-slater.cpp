@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   }
 
   printf("Running simultaion with %u electrons for %u steps\n", n, m);
-	Matrix<float> D = random(n);
+	//Matrix<float> D = numerical::random(n);
 
 	for (size_t i = 0; i < n; ++i) {
 		for (size_t j = 0; j < n; ++j) {

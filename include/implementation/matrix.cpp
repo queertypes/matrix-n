@@ -80,7 +80,8 @@ namespace numerical {
 	template <typename T,
 						typename _OutAlloc,
 						typename _InAlloc>
-	_OutAlloc Matrix<T, _OutAlloc, _InAlloc>::get_outer_allocator() constexpr
+	constexpr _OutAlloc 
+	Matrix<T, _OutAlloc, _InAlloc>::get_outer_allocator() const
 	{
 		return _outer_allocator;
 	}
@@ -88,7 +89,8 @@ namespace numerical {
 	template <typename T,
 						typename _OutAlloc,
 						typename _InAlloc>
-	_InAlloc Matrix<T, _OutAlloc, _InAlloc>::get_inner_allocator() constexpr
+	constexpr _InAlloc 
+	Matrix<T, _OutAlloc, _InAlloc>::get_inner_allocator() const
 	{
 		return _inner_allocator;
 	}	
