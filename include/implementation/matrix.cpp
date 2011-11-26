@@ -279,10 +279,12 @@ namespace numerical {
 	operator+(const T& lhs,
 						const Matrix<T, _Alloc>& rhs)
 	{
-		Matrix<T, _Alloc> result(lhs);
+		Matrix<T, _Alloc> result(rhs);
 		for (size_t i = 0; i < result.rows(); ++i)
 			for (size_t j = 0; j < result.cols(); ++j)
-				result(i,j) = rhs + result(i,j);
+				result(i,j) = lhs + result(i,j);
+
+		return result;
 	}
 	
 	template <typename T,
@@ -291,10 +293,12 @@ namespace numerical {
 	operator-(const T& lhs,
 						const Matrix<T, _Alloc>& rhs)
 	{
-		Matrix<T, _Alloc> result(lhs);
+		Matrix<T, _Alloc> result(rhs);
 		for (size_t i = 0; i < result.rows(); ++i)
 			for (size_t j = 0; j < result.cols(); ++j)
-				result(i,j) = rhs - result(i,j);
+				result(i,j) = lhs - result(i,j);
+
+		return result;
 	}
 	
 	template <typename T,
@@ -303,10 +307,12 @@ namespace numerical {
 	operator*(const T& lhs,
 						const Matrix<T, _Alloc>& rhs)
 	{
-		Matrix<T, _Alloc> result(lhs);
+		Matrix<T, _Alloc> result(rhs);
 		for (size_t i = 0; i < result.rows(); ++i)
 			for (size_t j = 0; j < result.cols(); ++j)
-				result(i,j) = rhs * result(i,j);
+				result(i,j) = lhs * result(i,j);
+
+		return result;
 	}	
 
 	template <typename T,

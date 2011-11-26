@@ -41,4 +41,4 @@ return D(R') / D(R) > threshold
 Notes:
 * Store all D[k] calculated so far
 * Store all R[k] calculated so far
-
+					
