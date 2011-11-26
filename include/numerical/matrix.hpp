@@ -1,6 +1,8 @@
 #ifndef NUMERICAL_MATRIX_HPP
 #define NUMERICAL_MATRIX_HPP
 
+#include <config.h>
+
 namespace numerical {
 
   template <typename T,
@@ -16,21 +18,27 @@ namespace numerical {
     Matrix(const Matrix& other);
     ~Matrix();
 
+#ifdef HAS_MOVE_CONSTRUCTOR
     Matrix(Matrix&& other);
+#endif
+
+#ifdef HAS_MOVE_ASSIGNMENT
     Matrix& operator=(Matrix&& other);
+#endif
 		
     Matrix& operator=(const Matrix& other);
+
+    T& operator()(const size_t row, const size_t col);
+    T& operator()(const size_t row, const size_t col) const;
 
     Matrix& operator+=(const Matrix& other);
     Matrix& operator-=(const Matrix& other);
     Matrix& operator*=(const Matrix& other);
 
-    Matrix& operator+=(const T other);
-    Matrix& operator-=(const T other);
-    Matrix& operator*=(const T other);
-
-    T& operator()(const size_t row, const size_t col);
-    T& operator()(const size_t row, const size_t col) const;
+    Matrix& operator+=(const T& other);
+    Matrix& operator-=(const T& other);
+    Matrix& operator*=(const T& other);
+    Matrix& operator/=(const T& other);
 
   public:
     T* data() const;
@@ -44,6 +52,60 @@ namespace numerical {
     static allocator_type _allocator;
   };
 
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator+(const Matrix<T, _Alloc>&, 
+															const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator-(const Matrix<T, _Alloc>&, 
+															const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator*(const Matrix<T, _Alloc>&, 
+															const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator+(const Matrix<T, _Alloc>&, 
+															const T&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator-(const Matrix<T, _Alloc>&, 
+															const T&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator*(const Matrix<T, _Alloc>&, 
+															const T&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator+(const T&, 
+															const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator-(const T&, 
+															const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	Matrix<T, _Alloc> operator*(const T&, 
+															const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	bool operator==(const Matrix<T, _Alloc>&,
+									const Matrix<T, _Alloc>&);
+
+	template <typename T,
+						class _Alloc>
+	bool operator!=(const Matrix<T, _Alloc>&,
+									const Matrix<T, _Alloc>&);	
 }
 
 #include <implementation/matrix.cpp>
