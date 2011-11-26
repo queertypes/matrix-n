@@ -19,12 +19,12 @@ namespace numerical {
 	};
 
 	template <class Matrix,
-						class RandomNumberGenerator = std::mt19937>
+						class RandomNumberGenerator = std::minstd_rand>
 	class RandomMatrixGenerator {
 	public:
 		typedef typename Matrix::value_type value_type;
 	public:
-		Matrix&& operator()(const size_t n) const;
+		Matrix operator()(const size_t n) const;
 		Matrix operator()(const size_t rows, const size_t cols) const;
 
 	private:
@@ -35,14 +35,14 @@ namespace numerical {
 
 	template <class Matrix,
 						class MatrixGenerator>
-	Matrix&& generate_matrix(const size_t n);
+	Matrix generate_matrix(const size_t n);
 
 	template <class Matrix,
 						class MatrixGenerator>
 	Matrix generate_matrix(const size_t rows, const size_t cols);
 
 	template <class Matrix>
-	Matrix&& random(const size_t n);
+	Matrix random(const size_t n);
 
 	template <class Matrix>
 	Matrix random(const size_t rows, const size_t cols);

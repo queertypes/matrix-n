@@ -1,97 +1,111 @@
 namespace numerical {
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	Matrix<T, _OutAlloc, _InAlloc>::Matrix(const size_t n) 
+						typename _Alloc>
+	Matrix<T, _Alloc>::Matrix(const size_t n) 
 		: _rows(n), _cols(n),
-			_data(_outer_allocator.allocate(n))
+			_data(_allocator.allocate(n*n))
 	{
-		for (size_t i = 0; i < n; ++i)
-			_data[i] = _inner_allocator.allocate(n);
+		std::cout << "ctor\n";
 	}
 	
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	Matrix<T, _OutAlloc, _InAlloc>::Matrix(const size_t rows, const size_t cols) 
+						typename _Alloc>
+	Matrix<T, _Alloc>::Matrix(const size_t rows, const size_t cols) 
 						: _rows(rows), _cols(cols),
-						_data(_outer_allocator.allocate(rows))
+						_data(_allocator.allocate(rows*cols))
 	{
-		for (size_t i = 0; i < rows; ++i)
-			_data[i] = _inner_allocator.allocate(cols);
 	}
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	Matrix<T, _OutAlloc, _InAlloc>::~Matrix()
+						typename _Alloc>
+	Matrix<T, _Alloc>&
+	Matrix<T, _Alloc>::operator=(const Matrix& other)
 	{
+		std::cout << "copy ctor\n";
+		_rows = other._rows;
+		_cols = other._cols;
+		_data = _allocator.allocate(_rows * _cols);
+
 		for (size_t i = 0; i < _rows; ++i)
-			_inner_allocator.deallocate(_data[i], _cols);
-		_outer_allocator.deallocate(_data, _rows);
+			for (size_t j = 0; j < _cols; ++j)
+				*this(i,j) = other(i,j);
+
+		return *this;
 	}
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	T& Matrix<T, 
-					 _OutAlloc, 
-					 _InAlloc>::operator()(const size_t row, const size_t col) const
+						typename _Alloc>
+	Matrix<T, _Alloc>::~Matrix()
 	{
-		return _data[row][col];
+		std::cout << "dtor\n";
+		_allocator.deallocate(_data, _rows * _cols);
 	}
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	T& Matrix<T, 
-					 _OutAlloc, 
-					 _InAlloc>::operator()(const size_t row, const size_t col)
+						typename _Alloc>
+	Matrix<T, _Alloc>::Matrix(Matrix&& other)
 	{
-		return _data[row][col];
+		std::cout << "move ctor\n";
+		*this = std::move(other);
 	}
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	T** Matrix<T, _OutAlloc, _InAlloc>::data() const
+						typename _Alloc>
+	Matrix<T, _Alloc>& 
+	Matrix<T, _Alloc>::operator=(Matrix&& other)
+	{
+		std::cout << "move =\n";
+		std::swap(_rows, other._rows);
+		std::swap(_cols, other._cols);
+		std::swap(_data, other._data);
+
+		return *this;
+	}
+
+	template <typename T,
+						typename _Alloc>
+	T& Matrix<T, 
+					 _Alloc>::operator()(const size_t row, const size_t col) const
+	{
+		return _data[row * _cols + col];
+	}
+
+	template <typename T,
+						typename _Alloc>
+	T& Matrix<T, 
+					 _Alloc>::operator()(const size_t row, const size_t col)
+	{
+		return _data[row * _cols + col];
+	}
+
+	template <typename T,
+						typename _Alloc>
+	T* Matrix<T, _Alloc>::data() const
 	{
 		return _data;
 	}
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	size_t Matrix<T, _OutAlloc, _InAlloc>::rows() const
+						typename _Alloc>
+	size_t Matrix<T, _Alloc>::rows() const
 	{
 		return _rows;
 	}
 
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	size_t Matrix<T, _OutAlloc, _InAlloc>::cols() const
+						typename _Alloc>
+	size_t Matrix<T, _Alloc>::cols() const
 	{
 		return _cols;
 	}
 
 	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	constexpr _OutAlloc 
-	Matrix<T, _OutAlloc, _InAlloc>::get_outer_allocator() const
+						typename _Alloc>
+	constexpr _Alloc 
+	Matrix<T, _Alloc>::get_allocator() const
 	{
-		return _outer_allocator;
+		return _allocator;
 	}
-	
-	template <typename T,
-						typename _OutAlloc,
-						typename _InAlloc>
-	constexpr _InAlloc 
-	Matrix<T, _OutAlloc, _InAlloc>::get_inner_allocator() const
-	{
-		return _inner_allocator;
-	}	
 }

@@ -4,13 +4,11 @@
 namespace numerical {
 
   template <typename T,
-            typename OuterAllocator = std::allocator<T*>,
-            typename InnerAllocator = std::allocator<T> >
+            typename Allocator = std::allocator<T> >
   class Matrix {
   public:
     typedef T value_type;
-    typedef OuterAllocator outer_allocator_type;
-    typedef InnerAllocator inner_allocator_type;
+    typedef Allocator allocator_type;
 
   public:
     Matrix(const size_t n);
@@ -18,9 +16,9 @@ namespace numerical {
     Matrix(const Matrix& other);
     ~Matrix();
 
-    Matrix(const Matrix&& other);
-    Matrix& operator=(const Matrix&& other);
-    
+    Matrix(Matrix&& other);
+    Matrix& operator=(Matrix&& other);
+		
     Matrix& operator=(const Matrix& other);
 
     Matrix& operator+=(const Matrix& other);
@@ -35,17 +33,15 @@ namespace numerical {
     T& operator()(const size_t row, const size_t col) const;
 
   public:
-    T** data() const;
+    T* data() const;
     size_t rows() const;
     size_t cols() const;
-    constexpr outer_allocator_type get_outer_allocator() const;
-		constexpr inner_allocator_type get_inner_allocator() const;
+    constexpr allocator_type get_allocator() const;
 
   private:
     size_t _rows, _cols;
-    T** _data;
-    static outer_allocator_type _outer_allocator;
-    static inner_allocator_type _inner_allocator;
+    T* _data;
+    static allocator_type _allocator;
   };
 
 }

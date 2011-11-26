@@ -53,21 +53,21 @@ namespace numerical {
 	typename Matrix::value_type
 	RandomMatrixGenerator<Matrix, RNG>::generate_random_value() const
 	{
-		const typename Matrix::value_type val = 
-			static_cast<typename Matrix::value_type>(generator());
-		return val / std::numeric_limits<typename Matrix::value_type>::max();
+		return std::generate_canonical<typename Matrix::value_type,
+																	 sizeof(typename Matrix::value_type), 
+																	 RNG>(generator);
 	}
 
 	template <class Matrix,
 						class RNG>
-	Matrix&&
+	Matrix
 	RandomMatrixGenerator<Matrix, RNG>::operator()(const size_t n) const
 	{
 		Matrix result(n);
 		for (size_t i = 0; i < n; ++i)
 			for (size_t j = 0; j < n; ++j)
 				result(i,j) = generate_random_value();
-		return std::move(result);
+		return result;
 	}
 
 	template <class Matrix,
@@ -85,9 +85,9 @@ namespace numerical {
 
 	template <class Matrix,
 						class MatrixGenerator>
-	Matrix&& generate_matrix(const size_t n) {
+	Matrix generate_matrix(const size_t n) {
 		static MatrixGenerator g;
-		return std::move(g(n));
+		return g(n);
 	}
 
 	template <class Matrix,
@@ -98,9 +98,9 @@ namespace numerical {
 	}
 
 	template <class Matrix>
-	Matrix&& random(const size_t n) {
-		return std::move(generate_matrix<Matrix,
-																		 RandomMatrixGenerator<Matrix> >(n));
+	Matrix random(const size_t n) {
+		return generate_matrix<Matrix,
+													 RandomMatrixGenerator<Matrix> >(n);
 	}
 
 	template <class Matrix>
