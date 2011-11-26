@@ -35,7 +35,7 @@ namespace numerical {
 	template <typename T,
 						typename _OutAlloc,
 						typename _InAlloc>
-	T Matrix<T, 
+	T& Matrix<T, 
 					 _OutAlloc, 
 					 _InAlloc>::operator()(const size_t row, const size_t col) const
 	{
@@ -45,7 +45,7 @@ namespace numerical {
 	template <typename T,
 						typename _OutAlloc,
 						typename _InAlloc>
-	T Matrix<T, 
+	T& Matrix<T, 
 					 _OutAlloc, 
 					 _InAlloc>::operator()(const size_t row, const size_t col)
 	{

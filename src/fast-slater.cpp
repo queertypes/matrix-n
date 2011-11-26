@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <iostream>
 #include <numerical/matrix.hpp>
+#include <numerical/matrix_generator.hpp>
 using namespace std;
 using namespace numerical;
 
@@ -35,14 +36,26 @@ int main(int argc, char **argv)
   }
 
   printf("Running simultaion with %u electrons for %u steps\n", n, m);
-	//Matrix<float> D = numerical::random(n);
+	Matrix<float> D = random<Matrix<float> >(n);
+	//Matrix<float> v = random<Matrix<float> >(1, n);
 
+	cout << D.rows() << " " << D.cols() << endl;
+
+	/*
 	for (size_t i = 0; i < n; ++i) {
 		for (size_t j = 0; j < n; ++j) {
-			//cout << D(i,j) << " ";
+			cout << D(i,j) << " ";
 		}
-		//cout << "\n";
+		cout << "\n";
 	}
+	*/
+
+	/*
+	cout << "\n";
+	for (size_t i = 0; i < n; ++i)
+		cout << v(0,i) << " ";
+	cout << "\n";
+	*/
 
   return 0;
 }

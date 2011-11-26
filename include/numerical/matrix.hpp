@@ -31,8 +31,8 @@ namespace numerical {
     Matrix& operator-=(const T other);
     Matrix& operator*=(const T other);
 
-    T operator()(const size_t row, const size_t col);
-    T operator()(const size_t row, const size_t col) const;
+    T& operator()(const size_t row, const size_t col);
+    T& operator()(const size_t row, const size_t col) const;
 
   public:
     T** data() const;
