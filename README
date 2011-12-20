@@ -1,0 +1,19 @@
+# To configure:
+$> waf configure
+
+# To build:
+$> waf
+
+# To remove all build results:
+$> waf clean
+
+# To remove all build and configuration files:
+$> waf distclean
+
+For a successful build, a compiler supporting recent c++11 features 
+should be used. In particular, the following features are important:
+- rvalue references
+- std::move support
+- <chrono>
+
+-Alejandro Cabrera
