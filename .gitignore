@@ -3,3 +3,4 @@ lib
 .lock*
 *~
 include/config.h
+waf
