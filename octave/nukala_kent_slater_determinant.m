@@ -1,64 +1,34 @@
 function determinant = nukala_kent_slater_determinant(D, V, num_steps)
 	
-endfunction
+	printf("Start\n");
 
+	# Initialization
+	num_electrons = rows(D);
+	p = 1;
+	step = 1;
+	gamma = zeros();
+	U = zeros(num_steps, num_electrons);
 
-function slater_determinant = nukala_slater_determinant(D, v, num_steps,
-                                                        threshold)
-  num_electrons = rows(D);
-  u = zeros(num_electrons, num_steps);
-  V = zeros(num_electrons, num_steps);
-  V(:,1) = v;
-  gamma = zeros(1, num_steps);
-  
-  slater_determinant = _nukala_slater_iterate(D, V, u, gamma, 
-                                              num_electrons, num_steps,
-                                              threshold);
-endfunction
+	# Iterative refinement stage
+	for step = 1:num_steps
+		printf("Here: step(%d)\n", step);
+		p = mod(p, num_electrons) + 1;
+		U(step,:) = D(:,p);
+		for i = 1:step-1
+			U(step,:) = U(step,:) - gamma(1,i) * (V(i,:) * U(step,:)) * U(i,:);
+		endfor
+		R = 1 + V(step,:) * U(step,:);
+		gamma(1,step) = 1/R;
+		k = k + 1;
+	endfor
+	D_after = 0;
 
-function slater_determinant = _nukala_slater_recurse(D, v, u, gamma, 
-                                                     num_electrons, num_steps, 
-                                                     p, k, threshold) 
-  if k == num_steps
-    slater_determinant = det((eye(num_electrons) - 
-                              gamma(1,k) * u(:, k) * v'(k,:)) * det(D));
-  else
-    v(:, k) = rand(num_electrons, 1);
-    u(:, k) = D(:, p);
-    for i = 1:k-1
-      u(:, k) = u(:, k) - gamma(1,i) * (v'(k, :) * u(:, k)) * u(:, i);
-    endfor
-    R = 1 + v'(k, :) * u(:, k);
-    if R > threshold
-      gamma(1,k) = 1.0 / R;
-      k = k + 1;
-    endif
-    slater_determinant = _nukala_slater_recurse(D, v, u, gamma, num_electrons,
-                                                num_steps, 
-                                                mod(p,num_electrons) + 1, 
-                                                k);
-  endif
-endfunction
+	# Final reduction stage
+	prod = eye(num_electrons, num_electrons);
+	for i = 0:num_steps
+		prod = prod * (eye(num_electrons, num_electrons) - gamma(1,i) * U(,:) * V(i,:));
+	endfor
+	D_after = prod * D;
 
-function slater_determinant = _nukala_slater_iterate(D, v, u, gamma, 
-                                                     num_electrons, num_steps, 
-                                                     threshold)
-  k = 1;
-  p = 1;
-  while (k != num_steps)
-    p = mod(p, num_electrons) + 1;
-    v(:, k) = rand(num_electrons, 1);
-    u(:, k) = D(:, p);
-    for i = 1:k-1
-      u(:, k) = u(:, k) - gamma(1,i) * (v'(k, :) * u(:, k)) * u(:, i);
-    endfor
-    R = 1 + v'(k, :) * u(:, k);
-    if R > threshold
-      gamma(1,k) = 1.0 / R;
-      k = k + 1;
-    endif
-  endwhile
-  
-  slater_determinant = det((eye(num_electrons) - 
-                            gamma(1,k) * u(:, k) * v'(k,:)) * det(D));
+	determinant = det(D_after);
 endfunction
