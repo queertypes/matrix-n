@@ -1,3 +1,8 @@
+function determinant = nukala_kent_slater_determinant(D, V, num_steps)
+	
+endfunction
+
+
 function slater_determinant = nukala_slater_determinant(D, v, num_steps,
                                                         threshold)
   num_electrons = rows(D);
