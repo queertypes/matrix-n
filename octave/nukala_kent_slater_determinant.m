@@ -22,7 +22,7 @@ function determinant = nukala_kent_slater_determinant(D, V, num_steps)
 	for i = 1:num_steps
 		prod = prod * (eye(num_electrons, num_electrons) - gamma(1,i) * U(:,i) * V(i,:));
 	endfor
-	D_after = prod * D;
+	D_after = prod * D
 
 	determinant = det(D_after);
 endfunction
