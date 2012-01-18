@@ -18,5 +18,5 @@ function determinant = just_update_determinant(D, V, num_steps)
 	endfor
 
 	# Return determinant of final step
-	determinant = det(D_after);
+	determinant = det(D_curr);
 endfunction
