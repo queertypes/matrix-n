@@ -3,19 +3,25 @@ function determinant = just_update_determinant(D, V, num_steps)
 	D_after = D;
 	D_curr = D;
 	p = 0;
+	step = 1;
 
 	# Simply perform row exchange,
 	# calculate R as det(R') / det(R)
-	for step=1:num_steps
+  while step != num_steps
 		p = mod(p, num_electrons) + 1;
 		D_after(p,:) = V(step, :);
 		R = det(D_after) / det(D_curr);
+
 		if (abs(R) > .99)
-			D_curr = D_after;
+			# update current Slater matrix with accepted
+			# configuration and advance time step
+			D_curr(p,:) = D_after(p,:);
+			++step;
 		else
-			step = step - 1;
+			# revert change on future Slater matrix
+			D_after(p,:) = D_curr(p,:);
 		endif
-	endfor
+	endwhile
 
 	# Return determinant of final step
 	determinant = det(D_curr);
