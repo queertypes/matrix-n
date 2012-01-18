@@ -6,9 +6,10 @@ function determinant = nukala_kent_slater_determinant(D, V, num_steps,
   p = 0;
   gamma = zeros(1, num_steps);
   U = zeros(num_electrons, num_steps);
-  
+  step = 1;
+
   # Configuration stepping stage: Alg. 1
-  for step = 1:num_steps
+  while step < (num_steps + 1)
     p = mod(p, num_electrons) + 1;
     U(:,step) = D(:,p);
     for i = 1:step
@@ -17,10 +18,9 @@ function determinant = nukala_kent_slater_determinant(D, V, num_steps,
     R = 1 + V(step,:) * U(:,step);
     if (abs(R) > threshold)
       gamma(1,step) = 1/R;
-    else
-      step = step - 1;
+      ++step;
     endif
-  endfor
+  endwhile
 
   # Final reduction stage: Eq. 11
   prod = eye(num_electrons, num_electrons);
