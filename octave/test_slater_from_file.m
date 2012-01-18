@@ -1,4 +1,4 @@
-function determinants = test_slater_from_file(num_steps, num_electrons)
+function determinants = test_slater_from_file(num_electrons, num_steps)
 	# Load randomly generated matrices
 	determinants = zeros(1,3);
 	D = rand(num_electrons, num_electrons);
