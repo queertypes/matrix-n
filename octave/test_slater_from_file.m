@@ -3,7 +3,7 @@ function determinants = test_slater_from_file(num_electrons,
                                               threshold)
   # Load randomly generated matrices
   determinants = zeros(1,3);
-  D = rand(num_electrons, num_electrons);
+  D = zeros(num_electrons, num_electrons);
   file_name_V = sprintf("data/V_%d_%d.hdf5", num_electrons, num_steps);
   file_name_D = sprintf("data/D_%d_%d.hdf5", num_electrons, num_electrons);
   load("-hdf5", file_name_V, "V");

@@ -6,10 +6,10 @@ function determinant = just_update_determinant(D, V, num_steps, threshold)
   step = 1;
 
   # Simply perform row exchange,
-  # calculate R as det(R') / det(R)
+  # calculate R as det(new_R) / det(old_R)
   while step < (num_steps + 1)
     p = mod(p, num_electrons) + 1;
-    D_after(p,:) = V(step, :);
+    D_after(p,:) += V(step, :);
     R = det(D_after) / det(D_curr);
 
     if (abs(R) > threshold)
@@ -24,5 +24,6 @@ function determinant = just_update_determinant(D, V, num_steps, threshold)
   endwhile
 
   # Return determinant of final step
-  determinant = det(D_curr);
+	D_just = D_after
+  determinant = det(D_after);
 endfunction
