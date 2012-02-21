@@ -24,6 +24,5 @@ function determinant = just_update_determinant(D, V, num_steps, threshold)
   endwhile
 
   # Return determinant of final step
-	D_just = D_after
   determinant = det(D_after);
 endfunction

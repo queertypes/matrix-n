@@ -32,6 +32,5 @@ function determinant = nukala_kent_slater_determinant(D, V, num_steps,
   D_after = prod * D;
 
   # Return determinant of final step
-	D_nukala = inv(D_after)
   determinant = det(inv(D_after));
 endfunction

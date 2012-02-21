@@ -19,6 +19,5 @@
   endwhile
 
   # Return determinant of final step
-	D_sherman = inv(iD)
   determinant = det(inv(iD));
 endfunction
