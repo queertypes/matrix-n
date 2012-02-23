@@ -17,6 +17,6 @@ function determinants = test_slater_from_file(num_electrons,
 
   # Print results for comparison
   for i=1:3
-    determinants(1,i)
+    determinants(1,i);
   endfor
 endfunction
