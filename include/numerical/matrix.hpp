@@ -1,18 +1,18 @@
  /*
-    This file is part of Fast Slater.
+		This file is part of Fast Slater.
 
-    Fast Slater is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+		Fast Slater is free software: you can redistribute it and/or modify
+		it under the terms of the GNU General Public License as published by
+		the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version.
 
-    Fast Slater is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+		Fast Slater is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+		You should have received a copy of the GNU General Public License
+		along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 #ifndef NUMERICAL_MATRIX_HPP
 #define NUMERICAL_MATRIX_HPP
@@ -21,107 +21,142 @@
 
 namespace numerical {
 
-  template <typename T,
-            typename Allocator = std::allocator<T> >
-  class Matrix {
-  public:
-    typedef T value_type;
-    typedef Allocator allocator_type;
+	template <class T,
+						class Allocator = std::allocator<T>,
+						class MatrixImpl = SerialMatrixImplementation<T, Allocator>>
+	class Matrix {
+	public:
+		typedef T value_type;
+		typedef Allocator allocator_type;
+		typedef MatrixImpl matrix_implementation_type;
 
-  public:
-    Matrix(const size_t n);
-    Matrix(const size_t rows, const size_t cols);
-    Matrix(const Matrix& other);
-    ~Matrix();
+	public:
+		Matrix(const size_t n);
+		Matrix(const size_t rows, const size_t cols);
+		Matrix(const Matrix& other);
+		~Matrix();
 
 #ifdef HAS_MOVE_CONSTRUCTOR
-    Matrix(Matrix&& other);
+		Matrix(Matrix&& other);
 #endif
 
 #ifdef HAS_MOVE_ASSIGNMENT
-    Matrix& operator=(Matrix&& other);
+		Matrix& operator=(Matrix&& other);
 #endif
-    
-    Matrix& operator=(const Matrix& other);
 
-    T& operator()(const size_t row, const size_t col);
-    T& operator()(const size_t row, const size_t col) const;
+		Matrix& operator=(const Matrix& other);
 
-    Matrix& operator+=(const Matrix& other);
-    Matrix& operator-=(const Matrix& other);
-    Matrix& operator*=(const Matrix& other);
+		T& operator()(const size_t row, const size_t col);
+		T& operator()(const size_t row, const size_t col) const;
 
-    Matrix& operator+=(const T& other);
-    Matrix& operator-=(const T& other);
-    Matrix& operator*=(const T& other);
-    Matrix& operator/=(const T& other);
+		Matrix& operator+=(const Matrix& other);
+		Matrix& operator-=(const Matrix& other);
+		Matrix& operator*=(const Matrix& other);
 
-  public:
-    T* data() const;
-    size_t rows() const;
-    size_t cols() const;
-    constexpr allocator_type get_allocator() const;
+		Matrix& operator+=(const T& other);
+		Matrix& operator-=(const T& other);
+		Matrix& operator*=(const T& other);
+		Matrix& operator/=(const T& other);
 
-  private:
-    size_t _rows, _cols;
-    T* _data;
-    static allocator_type _allocator;
-  };
+	public:
+		T* data() const;
+		size_t rows() const;
+		size_t cols() const;
+		constexpr allocator_type get_allocator() const;
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator+(const Matrix<T, _Alloc>&, 
-                              const Matrix<T, _Alloc>&);
+	private:
+		size_t _rows, _cols;
+		T* _data;
+		static allocator_type _allocator;
+		static matrix_implementation_type _impl;
+	};
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator-(const Matrix<T, _Alloc>&, 
-                              const Matrix<T, _Alloc>&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator+(const Matrix<T, _Alloc, _Impl>&,
+						const Matrix<T, _Alloc, _Impl>&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator*(const Matrix<T, _Alloc>&, 
-                              const Matrix<T, _Alloc>&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator-(const Matrix<T, _Alloc, _Impl>&,
+						const Matrix<T, _Alloc, _Impl>&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator+(const Matrix<T, _Alloc>&, 
-                              const T&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator*(const Matrix<T, _Alloc, _Impl>&,
+						const Matrix<T, _Alloc, _Impl>&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator-(const Matrix<T, _Alloc>&, 
-                              const T&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator+(const Matrix<T, _Alloc, _Impl>&,
+						const T&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator*(const Matrix<T, _Alloc>&, 
-                              const T&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator-(const Matrix<T, _Alloc, _Impl>&,
+						const T&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator+(const T&, 
-                              const Matrix<T, _Alloc>&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator*(const Matrix<T, _Alloc, _Impl>&,
+						const T&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator-(const T&, 
-                              const Matrix<T, _Alloc>&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator+(const T&,
+						const Matrix<T, _Alloc, _Impl>&);
 
-  template <typename T,
-            class _Alloc>
-  Matrix<T, _Alloc> operator*(const T&, 
-                              const Matrix<T, _Alloc>&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator-(const T&,
+						const Matrix<T, _Alloc, _Impl>&);
 
-  template <typename T,
-            class _Alloc>
-  bool operator==(const Matrix<T, _Alloc>&,
-                  const Matrix<T, _Alloc>&);
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	Matrix<T, _Alloc, _Impl>
+	operator*(const T&,
+						const Matrix<T, _Alloc, _Impl>&);
 
-  template <typename T,
-            class _Alloc>
-  bool operator!=(const Matrix<T, _Alloc>&,
-                  const Matrix<T, _Alloc>&);  
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	bool operator==(const Matrix<T, _Alloc, _Impl>&,
+									const Matrix<T, _Alloc, _Impl>&);
+
+	template <typename T,
+						class _Alloc,
+						class _Impl>
+	bool operator!=(const Matrix<T, _Alloc, _Impl>&,
+									const Matrix<T, _Alloc, _Impl>&);
+
+	template <class T,
+						class _Alloc,
+						class _MatImpl,
+						class _DetImpl>
+	T det(const Matrix<T, _Alloc, _MatImpl>&);
+
+	template <class T,
+						class _Alloc,
+						class _MatImpl,
+						class _InvImpl>
+	Matrix inv(const Matrix<T, _Alloc, _MatImpl>&);
 }
 
 #include <implementation/matrix.cpp>
