@@ -23,7 +23,7 @@ namespace numerical {
 
 	template <class T,
 						class Allocator = std::allocator<T>,
-						class MatrixImpl = SerialMatrixImplementation<T, Allocator>>
+						class MatrixImpl = SerialMatrixImplementation<T, Allocator> >
 	class Matrix {
 	public:
 		typedef T value_type;
@@ -65,9 +65,6 @@ namespace numerical {
 		constexpr allocator_type get_allocator() const;
 
 	private:
-		size_t _rows, _cols;
-		T* _data;
-		static allocator_type _allocator;
 		static matrix_implementation_type _impl;
 	};
 
