@@ -12,7 +12,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with Fast Slater.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <cstdio>
 #include <iostream>
@@ -52,26 +52,27 @@ int main(int argc, char **argv)
   }
 
   printf("Running simultaion with %u electrons for %u steps\n", n, m);
-	Matrix<float> D = random<Matrix<float> >(n);
-	//Matrix<float> v = random<Matrix<float> >(1, n);
+  Matrix<float> D(n,m);
+  //Matrix<float> D = random<Matrix<float>>(n);
+  //Matrix<float> v = random<Matrix<float>>(1, n);
 
-	cout << D.rows() << " " << D.cols() << endl;
+  cout << D.rows() << " " << D.cols() << endl;
 
-	/*
-	for (size_t i = 0; i < n; ++i) {
-		for (size_t j = 0; j < n; ++j) {
-			cout << D(i,j) << " ";
-		}
-		cout << "\n";
-	}
-	*/
+  /*
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < n; ++j) {
+      cout << D(i,j) << " ";
+    }
+    cout << "\n";
+  }
+  */
 
-	/*
-	cout << "\n";
-	for (size_t i = 0; i < n; ++i)
-		cout << v(0,i) << " ";
-	cout << "\n";
-	*/
+  /*
+  cout << "\n";
+  for (size_t i = 0; i < n; ++i)
+    cout << v(0,i) << " ";
+  cout << "\n";
+  */
 
   return 0;
 }

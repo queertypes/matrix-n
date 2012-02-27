@@ -21,13 +21,13 @@ namespace numerical {
   namespace impl {
 
     template <class T, class _Alloc>
-    explicit SerialMatrixImplementation<T,
+    SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const size_t n)
         : _rows(n), _cols(n),
           _data(_allocator.allocate(n*n))
     {}
 
-    templae <class T, class _Alloc>
+    template <class T, class _Alloc>
     SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const size_t rows,
                                           const size_t cols)
@@ -109,6 +109,20 @@ namespace numerical {
       _Alloc>::operator()(const size_t row, const size_t col) const
     {
       return _data[_cols * row + col];
+    }
+
+    template <class T, class _Alloc>
+    size_t
+    SerialMatrixImplementation<T, _Alloc>::rows() const
+    {
+      return _rows;
+    }
+
+    template <class T, class _Alloc>
+    size_t
+    SerialMatrixImplementation<T, _Alloc>::cols() const
+    {
+      return _cols;
     }
   }
 }

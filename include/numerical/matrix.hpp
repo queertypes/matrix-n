@@ -18,6 +18,7 @@
 #define NUMERICAL_MATRIX_HPP
 
 #include <config.h>
+#include <numerical/matrix/serial_matrix_implementation.hpp>
 
 namespace numerical {
 

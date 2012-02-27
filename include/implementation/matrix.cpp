@@ -35,7 +35,7 @@ namespace numerical {
 
   template <class T,
             class _Alloc,
-            classs _Impl>
+            class _Impl>
   Matrix<T, _Alloc, _Impl>::Matrix(const Matrix<T, _Alloc, _Impl>& other)
     : _impl(other._impl)
   {
@@ -203,8 +203,8 @@ namespace numerical {
   Matrix<T, _Alloc, _Impl>
   operator-(const Matrix<T, _Alloc, _Impl>& m)
   {
-    -(_impl);
-    return *this;
+    //-_impl;
+    return m;
   }
 
   template <class T,

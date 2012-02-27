@@ -35,15 +35,16 @@ namespace numerical {
       SerialMatrixImplementation(const size_t rows,
                                  const size_t cols);
 
-      friend void swap(SerialMatrixImplementation& lhs,
-                       SerialMatrixImplementation& rhs);
+      template <class _T, class _Alloc>
+      friend void swap(SerialMatrixImplementation<_T, _Alloc>& lhs,
+                       SerialMatrixImplementation<_T, _Alloc>& rhs);
 
       SerialMatrixImplementation(const SerialMatrixImplementation&);
       SerialMatrixImplementation&
-      operator=(const SerialMatrixImplementation&);
+      operator=(SerialMatrixImplementation);
 
       SerialMatrixImplementation(SerialMatrixImplementation&&);
-      SerialMatrixImplementation
+      SerialMatrixImplementation&
       operator=(SerialMatrixImplementation&&);
 
       ~SerialMatrixImplementation();
