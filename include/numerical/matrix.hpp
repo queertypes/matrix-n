@@ -65,7 +65,7 @@ namespace numerical {
     constexpr allocator_type get_allocator() const;
 
   private:
-    static matrix_implementation_type _impl;
+    matrix_implementation_type _impl;
   };
 
   template <class T,
