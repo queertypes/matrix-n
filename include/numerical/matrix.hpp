@@ -31,7 +31,7 @@ namespace numerical {
     typedef MatrixImpl matrix_implementation_type;
 
   public:
-    serial Matrix(const size_t n);
+    explicit Matrix(const size_t n);
     Matrix(const size_t rows, const size_t cols);
     Matrix(const Matrix& other);
     ~Matrix();
