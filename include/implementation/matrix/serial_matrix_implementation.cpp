@@ -15,14 +15,15 @@
     along with Fast Slater.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <algorithm>
+#include <cassert>
 
 namespace numerical {
   namespace impl {
-    
+
     template <class T, class _Alloc>
-    explicit SerialMatrixImplementation<T, 
+    explicit SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const size_t n)
-        : _rows(n), _cols(n), 
+        : _rows(n), _cols(n),
           _data(_allocator.allocate(n*n))
     {}
 
@@ -44,32 +45,32 @@ namespace numerical {
       swap(lhs._cols, rhs._cols);
       swap(lhs._data, rhs._data);
     }
-    
+
     template <class T, class _Alloc>
     SerialMatrixImplementation<T,
-      _Alloc>::SerialMatrixImplementation(const SerialMatrixImplementation<T, 
+      _Alloc>::SerialMatrixImplementation(const SerialMatrixImplementation<T,
         _Alloc>& other)
         : _rows(other._rows), _cols(other._cols),
           _data(_allocator.allocate(other._rows * other._cols))
     {
-      std::copy(other._data, 
+      std::copy(other._data,
                 other._data + sizeof(T) * other._rows * other._cols,
                 _data);
     }
-    
+
     template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator=(SerialMatrixImplementation<T, _Alloc> other)
     {
       swap(*this, other);
-      
+
       return *this;
     }
 
     template <class T, class _Alloc>
-    SerialMatrixImplementation<T, 
-      _Alloc>::SerialMatrixImplementation(SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
+      _Alloc>::SerialMatrixImplementation(SerialMatrixImplementation<T,
         _Alloc>&& other)
         : _rows(0), _cols(0),
           _data(nullptr)
@@ -79,7 +80,7 @@ namespace numerical {
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator=(SerialMatrixImplementation<T, _Alloc>&& other)
     {
       std::move(_rows, other._rows);
@@ -88,7 +89,7 @@ namespace numerical {
     }
 
     template <class T, class _Alloc>
-    SerialMatrixImplementation<T, _Alloc>::~SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T, _Alloc>::~SerialMatrixImplementation<T,
       _Alloc>()
     {
       _allocator.deallocate(_data, sizeof(T) *  _rows * _cols);
@@ -96,7 +97,7 @@ namespace numerical {
 
     template <class T, class _Alloc>
     T&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator()(const size_t row, const size_t col)
     {
       return _data[_cols * row + col];
@@ -104,7 +105,7 @@ namespace numerical {
 
     template <class T, class _Alloc>
     T&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator()(const size_t row, const size_t col) const
     {
       return _data[_cols * row + col];
