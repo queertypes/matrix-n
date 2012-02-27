@@ -1,5 +1,21 @@
-#ifndef NUMERICAL_DETAIL_SERIAL_MATRIX_IMPLEMENTATION_HPP
-#define NUMERICAL_DETAIL_SERIAL_MATRIX_IMPLEMENTATION_HPP
+ /*
+    This file is part of Fast Slater.
+
+    Fast Slater is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Fast Slater is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Fast Slater.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#ifndef NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
+#define NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
 
 namespace numerical {
 	namespace impl {
@@ -19,6 +35,9 @@ namespace numerical {
       SerialMatrixImplementation(const size_t rows,
                                  const size_t cols);
       
+      friend void swap(SerialMatrixImplementation& lhs,
+                       SerialMatrixImplementation& rhs);
+
       SerialMatrixImplementation(const SerialMatrixImplementation&);
       SerialMatrixImplementation&
       operator=(const SerialMatrixImplementation&);
