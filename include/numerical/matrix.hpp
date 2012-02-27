@@ -12,7 +12,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with Fast Slater.  If not, see <http://www.gnu.org/licenses/>.
  */
 #ifndef NUMERICAL_MATRIX_HPP
 #define NUMERICAL_MATRIX_HPP
@@ -136,18 +136,6 @@ namespace numerical {
   Matrix<T, _Alloc, _Impl>
   operator*(const T&,
             const Matrix<T, _Alloc, _Impl>&);
-
-  template <class T,
-            class _Alloc,
-            class _Impl>
-  bool operator==(const Matrix<T, _Alloc, _Impl>&,
-                  const Matrix<T, _Alloc, _Impl>&);
-
-  template <class T,
-            class _Alloc,
-            class _Impl>
-  bool operator!=(const Matrix<T, _Alloc, _Impl>&,
-                  const Matrix<T, _Alloc, _Impl>&);
 }
 
 #include <implementation/matrix.cpp>
