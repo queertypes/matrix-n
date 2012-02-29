@@ -68,7 +68,7 @@ def build(bld):
   bld.program(source='src/fast-slater.cpp',
               includes='include',
               target='fast-slater',
-              cxxflags='-Wall -Wextra -pedantic -ansi -std=c++0x -g -O2')
+              cxxflags='-Wall -Wextra -pedantic -ansi -std=c++0x -g')
 
   from waflib.Tools import waf_unit_test
   bld.add_post_fun(waf_unit_test.summary)
@@ -76,8 +76,9 @@ def build(bld):
   for test in os_listdir('tests'):
     bld.program(source=path_join('tests', test),
                 features='test',
-                cxxflags='-Wall -Wextra -O2 -g -std=c++0x',
+                cxxflags='-Wall -Wextra -g -std=c++0x',
                 includes='include',
                 libpath='../lib',
                 lib='gtest',
                 target=path_join('tests', test.replace('.cpp','')))
+

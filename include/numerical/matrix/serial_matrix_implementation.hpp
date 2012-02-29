@@ -40,12 +40,9 @@ namespace numerical {
                        SerialMatrixImplementation<_T, _Alloc>& rhs);
 
       SerialMatrixImplementation(const SerialMatrixImplementation&);
-      SerialMatrixImplementation&
-      operator=(SerialMatrixImplementation);
-
       SerialMatrixImplementation(SerialMatrixImplementation&&);
       SerialMatrixImplementation&
-      operator=(SerialMatrixImplementation&&);
+      operator=(SerialMatrixImplementation);
 
       ~SerialMatrixImplementation();
 
@@ -74,9 +71,9 @@ namespace numerical {
       constexpr allocator_type get_allocator() const;
 
     private:
+      allocator_type _allocator;
       size_t _rows, _cols;
       T* _data;
-      static allocator_type _allocator;
     };
 
     template <class T,

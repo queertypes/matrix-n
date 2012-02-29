@@ -17,7 +17,6 @@
 #ifndef NUMERICAL_MATRIX_HPP
 #define NUMERICAL_MATRIX_HPP
 
-#include <config.h>
 #include <numerical/matrix/serial_matrix_implementation.hpp>
 
 namespace numerical {
@@ -37,13 +36,8 @@ namespace numerical {
     Matrix(const Matrix& other);
     ~Matrix();
 
-#ifdef HAS_MOVE_CONSTRUCTOR
     Matrix(Matrix&& other);
-#endif
-
-#ifdef HAS_MOVE_ASSIGNMENT
     Matrix& operator=(Matrix&& other);
-#endif
 
     Matrix& operator=(const Matrix& other);
 
@@ -58,6 +52,11 @@ namespace numerical {
     Matrix& operator-=(const T& other);
     Matrix& operator*=(const T& other);
     Matrix& operator/=(const T& other);
+
+    template <class _T, class _Alloc, class _Impl>
+    friend bool 
+    operator==(const Matrix<_T, _Alloc, _Impl>&,
+               const Matrix<_T, _Alloc, _Impl>&);
 
   public:
     T* data() const;

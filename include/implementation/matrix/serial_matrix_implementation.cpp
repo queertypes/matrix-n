@@ -23,7 +23,8 @@ namespace numerical {
     template <class T, class _Alloc>
     SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const size_t n)
-        : _rows(n), _cols(n),
+        : _allocator(),
+          _rows(n), _cols(n),
           _data(_allocator.allocate(n*n))
     {}
 
@@ -31,7 +32,8 @@ namespace numerical {
     SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const size_t rows,
                                           const size_t cols)
-        : _rows(rows), _cols(cols),
+        : _allocator(),
+          _rows(rows), _cols(cols),
           _data(_allocator.allocate(rows*cols))
     {}
 
@@ -50,11 +52,12 @@ namespace numerical {
     SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const SerialMatrixImplementation<T,
         _Alloc>& other)
-        : _rows(other._rows), _cols(other._cols),
+        : _allocator(),
+          _rows(other._rows), _cols(other._cols),
           _data(_allocator.allocate(other._rows * other._cols))
     {
       std::copy(other._data,
-                other._data + sizeof(T) * other._rows * other._cols,
+                other._data + other._rows * other._cols,
                 _data);
     }
 
@@ -72,27 +75,18 @@ namespace numerical {
     SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(SerialMatrixImplementation<T,
         _Alloc>&& other)
-        : _rows(0), _cols(0),
+        : _allocator(),
+          _rows(0), _cols(0),
           _data(nullptr)
     {
       swap(*this, other);
     }
 
     template <class T, class _Alloc>
-    SerialMatrixImplementation<T, _Alloc>&
-    SerialMatrixImplementation<T,
-      _Alloc>::operator=(SerialMatrixImplementation<T, _Alloc>&& other)
-    {
-      std::move(_rows, other._rows);
-      std::move(_cols, other._cols);
-      std::move(_data, other._data);
-    }
-
-    template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>::~SerialMatrixImplementation<T,
       _Alloc>()
     {
-      _allocator.deallocate(_data, sizeof(T) *  _rows * _cols);
+      _allocator.deallocate(_data, _rows * _cols);
     }
 
     template <class T, class _Alloc>
@@ -123,6 +117,217 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>::cols() const
     {
       return _cols;
+    }
+
+    template <class T, class _Alloc>
+    T*
+    SerialMatrixImplementation<T, _Alloc>::data() const
+    {
+      return _data;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, 
+      _Alloc>::operator+=(const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      assert(rhs.rows() == rows());
+      assert(rhs.cols() == cols());
+
+      for (size_t i = 0; i < rows(); ++i) {
+        for (size_t j = 0; j < cols(); ++j) {
+          (*this)(i,j) += rhs(i,j);
+        }
+      }
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, 
+      _Alloc>::operator-=(const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      assert(rhs.rows() == rows());
+      assert(rhs.cols() == cols());
+
+      for (size_t i = 0; i < rows(); ++i) {
+        for (size_t j = 0; j < cols(); ++j) {
+          (*this)(i,j) -= rhs(i,j);
+        }
+      }
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, 
+      _Alloc>::operator*=(const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      assert(rhs.rows() == rows());
+      assert(rhs.cols() == cols());
+      assert(cols() == rhs.rows());
+
+      SerialMatrixImplementation<T, _Alloc> result(rows(), rhs.cols());
+
+      for (size_t i = 0; i < rows(); ++i) {
+        for (size_t j = 0; j < rhs.cols(); ++j) {
+          for (size_t k = 0; k < cols(); ++k) {
+            result(i,j) += (*this)(i,k) * rhs(k,j);
+          }
+        }
+      }
+      
+      *this = std::move(result);
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, _Alloc>::operator+=(const T& scalar)
+    {
+      for (size_t i = 0; i < rows(); ++i) {
+        for (size_t j = 0; j < cols(); ++j) {
+          (*this)(i,j) += scalar;
+        }
+      }
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, _Alloc>::operator-=(const T& scalar)
+    {
+      for (size_t i = 0; i < rows(); ++i) {
+        for (size_t j = 0; j < cols(); ++j) {
+          (*this)(i,j) -= scalar;
+        }
+      }
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, _Alloc>::operator*=(const T& scalar)
+    {
+      for (size_t i = 0; i < rows(); ++i) {
+        for (size_t j = 0; j < cols(); ++j) {
+          (*this)(i,j) *= scalar;
+        }
+      }
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator+(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result += rhs;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator-(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result -= rhs;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator*(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result *= rhs;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator+(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const T& scalar)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result += scalar;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator-(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const T& scalar)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result -= scalar;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator*(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const T& scalar)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result *= scalar;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator+(const T& scalar,
+              const SerialMatrixImplementation<T, _Alloc>& lhs)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result += scalar;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator-(const T& scalar,
+              const SerialMatrixImplementation<T, _Alloc>& lhs)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return (-result) += scalar;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator*(const T& scalar,
+              const SerialMatrixImplementation<T, _Alloc>& lhs)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result *= scalar;
+    }
+
+    template <class T, class _Alloc>
+    bool
+    operator==(const SerialMatrixImplementation<T, _Alloc>& lhs,
+               const SerialMatrixImplementation<T, _Alloc>& rhs)
+    {
+      if (lhs.rows() != rhs.rows()) return false;
+      if (lhs.cols() != rhs.cols()) return false;
+
+      if (!std::equal(lhs.data(), 
+                      lhs.data() + lhs.cols() * lhs.rows(),
+                      rhs.data())) {
+        return false;
+      }
+
+      return true;
     }
   }
 }
