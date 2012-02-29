@@ -1,4 +1,4 @@
- /*
+/*
     This file is part of Fast Slater.
 
     Fast Slater is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ namespace numerical {
   Matrix
   IdentityMatrixGenerator<Matrix>::operator()(const size_t n) const
   {
-    Matrix result(n);
+    Matrix result{n};
     for (size_t i = 0; i < n; ++i)
       result(i,i) = 1;
     return result;
@@ -34,7 +34,7 @@ namespace numerical {
   IdentityMatrixGenerator<Matrix>::operator()(const size_t rows,
                                               const size_t cols) const
   {
-    Matrix result(rows, cols);
+    Matrix result{rows, cols};
     for (size_t i = 0; i < std::min(rows,cols); ++i)
       result(i,i) = 1;
     return result;
@@ -45,10 +45,9 @@ namespace numerical {
   Matrix
   ValueMatrixGenerator<Matrix, Value>::operator()(const size_t n) const
   {
-    Matrix result(n);
-    for (size_t i = 0; i < n; ++i)
-      for (size_t j = 0; j < n; ++j)
-        result(i,j) = Value;
+    Matrix result{n};
+    for (auto& i : result)
+      i = Value;
     return result;
   }
   template <class Matrix,
@@ -58,9 +57,8 @@ namespace numerical {
                                                   const size_t cols) const
   {
     Matrix result(rows,cols);
-    for (size_t i = 0; i < rows; ++i)
-      for (size_t j = 0; j < cols; ++j)
-        result(i,j) = Value;
+    for (auto& i : result)
+      i = Value;
     return result;
   }
 
@@ -79,10 +77,9 @@ namespace numerical {
   Matrix
   RandomMatrixGenerator<Matrix, RNG>::operator()(const size_t n) const
   {
-    Matrix result(n);
-    for (size_t i = 0; i < n; ++i)
-      for (size_t j = 0; j < n; ++j)
-        result(i,j) = generate_random_value();
+    Matrix result{n};
+    for (auto& i : result)
+      i = generate_random_value();
     return result;
   }
 
@@ -92,10 +89,9 @@ namespace numerical {
   RandomMatrixGenerator<Matrix, RNG>::operator()(const size_t rows,
                                                  const size_t cols) const
   {
-    Matrix result(rows, cols);
-    for (size_t i = 0; i < rows; ++i)
-      for (size_t j = 0; j < cols; ++j)
-        result(i,j) = generate_random_value();
+    Matrix result{rows, cols};
+    for (auto& i : result)
+      i = generate_random_value();
     return result;
   }
 
@@ -116,48 +112,48 @@ namespace numerical {
   template <class Matrix>
   Matrix random(const size_t n) {
     return generate_matrix<Matrix,
-                           RandomMatrixGenerator<Matrix> >(n);
+                           RandomMatrixGenerator<Matrix>>(n);
   }
 
   template <class Matrix>
   Matrix random(const size_t rows, const size_t cols) {
     return generate_matrix<Matrix,
-                           RandomMatrixGenerator<Matrix> >(rows, cols);
+                           RandomMatrixGenerator<Matrix>>(rows, cols);
   }
 
   template <class Matrix>
   Matrix zeros(const size_t n) {
     return generate_matrix<Matrix,
-                           ValueMatrixGenerator<Matrix, 0> >(n);
+                           ValueMatrixGenerator<Matrix, 0>>(n);
   }
 
   template <class Matrix>
   Matrix zeros(const size_t rows, const size_t cols) {
     return generate_matrix<Matrix,
-                           ValueMatrixGenerator<Matrix, 0> >(rows, cols);
+                           ValueMatrixGenerator<Matrix, 0>>(rows, cols);
   }
 
   template <class Matrix>
   Matrix ones(const size_t n) {
     return generate_matrix<Matrix,
-                           ValueMatrixGenerator<Matrix, 1> >(n);
+                           ValueMatrixGenerator<Matrix, 1>>(n);
   }
 
   template <class Matrix>
   Matrix ones(const size_t rows, const size_t cols) {
     return generate_matrix<Matrix,
-                           ValueMatrixGenerator<Matrix, 1> >(rows, cols);
+                           ValueMatrixGenerator<Matrix, 1>>(rows, cols);
   }
 
   template <class Matrix>
   Matrix eye(const size_t n) {
     return generate_matrix<Matrix,
-                           IdentityMatrixGenerator<Matrix> >(n);
+                           IdentityMatrixGenerator<Matrix>>(n);
   }
 
   template <class Matrix>
   Matrix eye(const size_t rows, const size_t cols) {
     return generate_matrix<Matrix,
-                           IdentityMatrixGenerator<Matrix> >(rows, cols);
+                           IdentityMatrixGenerator<Matrix>>(rows, cols);
   }
 }
