@@ -22,6 +22,14 @@ namespace numerical {
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T,
+      _Alloc>::SerialMatrixImplementation()
+        : _allocator(),
+          _rows(0), _cols(0),
+          _data(nullptr)
+    {}
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(const size_t n)
         : _allocator(),
           _rows(n), _cols(n),
@@ -54,11 +62,9 @@ namespace numerical {
         _Alloc>& other)
         : _allocator(),
           _rows(other._rows), _cols(other._cols),
-          _data(_allocator.allocate(other._rows * other._cols))
+          _data(_allocator.allocate(_rows * _cols))
     {
-      std::copy(other._data,
-                other._data + other._rows * other._cols,
-                _data);
+      std::copy(cbegin(other), cend(other), begin(*this));
     }
 
     template <class T, class _Alloc>
@@ -86,7 +92,6 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>::~SerialMatrixImplementation<T,
       _Alloc>()
     {
-      _allocator.deallocate(_data, _rows * _cols);
     }
 
     template <class T, class _Alloc>
@@ -94,7 +99,7 @@ namespace numerical {
     SerialMatrixImplementation<T,
       _Alloc>::operator()(const size_t row, const size_t col)
     {
-      return _data[_cols * row + col];
+      return (_data.get())[_cols * row + col];
     }
 
     template <class T, class _Alloc>
@@ -102,7 +107,7 @@ namespace numerical {
     SerialMatrixImplementation<T,
       _Alloc>::operator()(const size_t row, const size_t col) const
     {
-      return _data[_cols * row + col];
+      return (_data.get())[_cols * row + col];
     }
 
     template <class T, class _Alloc>
@@ -123,46 +128,87 @@ namespace numerical {
     T*
     SerialMatrixImplementation<T, _Alloc>::data() const
     {
-      return _data;
+      return _data.get();
+    }
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::iterator
+    begin(const SerialMatrixImplementation<T, _Alloc>& m)
+    {
+      return m.data();
+    }
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::const_iterator
+    cbegin(const SerialMatrixImplementation<T, _Alloc>& m)
+    {
+      return m.data();
+    }
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::iterator
+    end(const SerialMatrixImplementation<T, _Alloc>& m)
+    {
+      return m.data() + m.rows() * m.cols();
+    }
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::const_iterator
+    cend(const SerialMatrixImplementation<T, _Alloc>& m)
+    {
+      return m.data() + m.rows() * m.cols();
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    SerialMatrixImplementation<T, _Alloc>::operator-()
+    {
+      SerialMatrixImplementation<T, _Alloc> result{*this};
+
+      for (auto iter = begin(result), iend = end(result), iter2 = cbegin(*this);
+           iter != iend; ++iter, ++iter2)
+        *iter = -(*iter2);
+
+      return result;
     }
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator+=(const SerialMatrixImplementation<T, _Alloc>& rhs)
     {
       assert(rhs.rows() == rows());
       assert(rhs.cols() == cols());
 
-      for (size_t i = 0; i < rows(); ++i) {
-        for (size_t j = 0; j < cols(); ++j) {
-          (*this)(i,j) += rhs(i,j);
-        }
-      }
+      for (auto iter = begin(*this), iend = end(*this), iter2 = cbegin(rhs);
+           iter != iend; ++iter, ++iter2)
+        *iter += *iter2;
 
       return *this;
     }
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator-=(const SerialMatrixImplementation<T, _Alloc>& rhs)
     {
       assert(rhs.rows() == rows());
       assert(rhs.cols() == cols());
 
-      for (size_t i = 0; i < rows(); ++i) {
-        for (size_t j = 0; j < cols(); ++j) {
-          (*this)(i,j) -= rhs(i,j);
-        }
-      }
+      for (auto iter = begin(*this), iend = end(*this), iter2 = cbegin(rhs);
+           iter != iend; ++iter, ++iter2)
+        *iter -= *iter2;
 
       return *this;
     }
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>&
-    SerialMatrixImplementation<T, 
+    SerialMatrixImplementation<T,
       _Alloc>::operator*=(const SerialMatrixImplementation<T, _Alloc>& rhs)
     {
       assert(rhs.rows() == rows());
@@ -178,7 +224,7 @@ namespace numerical {
           }
         }
       }
-      
+
       *this = std::move(result);
 
       return *this;
@@ -188,11 +234,9 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator+=(const T& scalar)
     {
-      for (size_t i = 0; i < rows(); ++i) {
-        for (size_t j = 0; j < cols(); ++j) {
-          (*this)(i,j) += scalar;
-        }
-      }
+      for (auto iter = begin(*this), iend = end(*this);
+           iter != iend; ++iter)
+        *iter += scalar;
 
       return *this;
     }
@@ -201,11 +245,9 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator-=(const T& scalar)
     {
-      for (size_t i = 0; i < rows(); ++i) {
-        for (size_t j = 0; j < cols(); ++j) {
-          (*this)(i,j) -= scalar;
-        }
-      }
+      for (auto iter = begin(*this), iend = end(*this);
+           iter != iend; ++iter)
+        *iter -= scalar;
 
       return *this;
     }
@@ -214,11 +256,20 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator*=(const T& scalar)
     {
-      for (size_t i = 0; i < rows(); ++i) {
-        for (size_t j = 0; j < cols(); ++j) {
-          (*this)(i,j) *= scalar;
-        }
-      }
+      for (auto iter = begin(*this), iend = end(*this);
+           iter != iend; ++iter)
+        *iter *= scalar;
+
+      return *this;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>&
+    SerialMatrixImplementation<T, _Alloc>::operator/=(const T& scalar)
+    {
+      for (auto iter = begin(*this), iend = end(*this);
+           iter != iend; ++iter)
+        *iter /= scalar;
 
       return *this;
     }
@@ -285,6 +336,16 @@ namespace numerical {
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T, _Alloc>
+    operator/(const SerialMatrixImplementation<T, _Alloc>& lhs,
+              const T& scalar)
+    {
+      SerialMatrixImplementation<T, _Alloc> result(lhs);
+
+      return result /= scalar;
+    }
+
+    template <class T, class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
     operator+(const T& scalar,
               const SerialMatrixImplementation<T, _Alloc>& lhs)
     {
@@ -321,9 +382,7 @@ namespace numerical {
       if (lhs.rows() != rhs.rows()) return false;
       if (lhs.cols() != rhs.cols()) return false;
 
-      if (!std::equal(lhs.data(), 
-                      lhs.data() + lhs.cols() * lhs.rows(),
-                      rhs.data())) {
+      if (!std::equal(cbegin(lhs), cend(lhs), cbegin(rhs)) ) {
         return false;
       }
 

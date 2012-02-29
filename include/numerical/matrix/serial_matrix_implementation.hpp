@@ -17,6 +17,8 @@
 #ifndef NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
 #define NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
 
+#include <memory>
+
 namespace numerical {
   namespace impl {
 
@@ -27,10 +29,13 @@ namespace numerical {
     public:
 
       typedef T value_type;
+      typedef T* iterator;
+      typedef const T *const const_iterator;
       typedef Allocator allocator_type;
 
     public:
 
+      SerialMatrixImplementation();
       explicit SerialMatrixImplementation(const size_t n);
       SerialMatrixImplementation(const size_t rows,
                                  const size_t cols);
@@ -48,6 +53,9 @@ namespace numerical {
 
       T& operator()(const size_t row, const size_t col);
       T& operator()(const size_t row, const size_t col) const;
+
+      SerialMatrixImplementation
+      operator-();
 
       SerialMatrixImplementation&
       operator+=(const SerialMatrixImplementation&);
@@ -73,8 +81,28 @@ namespace numerical {
     private:
       allocator_type _allocator;
       size_t _rows, _cols;
-      T* _data;
+      std::unique_ptr<T> _data;
     };
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::iterator
+    begin(const SerialMatrixImplementation<T, _Alloc>&);
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::const_iterator
+    cbegin(const SerialMatrixImplementation<T, _Alloc>&);
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::iterator
+    end(const SerialMatrixImplementation<T, _Alloc>&);
+
+    template <class T,
+              class _Alloc>
+    typename SerialMatrixImplementation<T, _Alloc>::const_iterator
+    cend(const SerialMatrixImplementation<T, _Alloc>&);
 
     template <class T,
               class _Alloc>
@@ -115,6 +143,12 @@ namespace numerical {
               class _Alloc>
     SerialMatrixImplementation<T, _Alloc>
     operator*(const SerialMatrixImplementation<T, _Alloc>&,
+              const T&);
+
+    template <class T,
+              class _Alloc>
+    SerialMatrixImplementation<T, _Alloc>
+    operator/(const SerialMatrixImplementation<T, _Alloc>&,
               const T&);
 
     template <class T,

@@ -27,22 +27,29 @@ namespace numerical {
   class Matrix {
   public:
     typedef T value_type;
+    typedef typename MatrixImpl::iterator iterator;
+    typedef typename MatrixImpl::const_iterator const_iterator;
     typedef Allocator allocator_type;
     typedef MatrixImpl matrix_implementation_type;
 
   public:
+    Matrix();
     explicit Matrix(const size_t n);
     Matrix(const size_t rows, const size_t cols);
     Matrix(const Matrix& other);
+    Matrix(Matrix&& other);
     ~Matrix();
 
-    Matrix(Matrix&& other);
-    Matrix& operator=(Matrix&& other);
+    template <class _T, class _Alloc, class _Impl>
+    void friend swap(Matrix<_T, _Alloc, _Impl>&,
+                     Matrix<_T, _Alloc, _Impl>&);
 
-    Matrix& operator=(const Matrix& other);
+    Matrix& operator=(Matrix other);
 
     T& operator()(const size_t row, const size_t col);
     T& operator()(const size_t row, const size_t col) const;
+
+    Matrix operator-();
 
     Matrix& operator+=(const Matrix& other);
     Matrix& operator-=(const Matrix& other);
@@ -67,6 +74,30 @@ namespace numerical {
   private:
     matrix_implementation_type _impl;
   };
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::iterator
+  begin(const Matrix<T, _Alloc, _Impl>& m);
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::const_iterator
+  cbegin(const Matrix<T, _Alloc, _Impl>& m);
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::iterator
+  end(const Matrix<T, _Alloc, _Impl>& m);
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::const_iterator
+  cend(const Matrix<T, _Alloc, _Impl>& m);
 
   template <class T,
             class _Alloc,

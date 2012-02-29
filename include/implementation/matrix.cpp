@@ -19,6 +19,14 @@ namespace numerical {
   template <class T,
             class _Alloc,
             class _Impl>
+  Matrix<T, _Alloc, _Impl>::Matrix()
+    : _impl()
+  {
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
   Matrix<T, _Alloc, _Impl>::Matrix(const size_t n)
     : _impl(n)
   {
@@ -44,23 +52,6 @@ namespace numerical {
   template <class T,
             class _Alloc,
             class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator=(const Matrix<T, _Alloc, _Impl>& other)
-  {
-    _impl = other._impl;
-    return *this;
-  }
-
-  template <class T,
-            class _Alloc,
-            class _Impl>
-  Matrix<T, _Alloc, _Impl>::~Matrix()
-  {
-  }
-
-  template <class T,
-            class _Alloc,
-            class _Impl>
   Matrix<T, _Alloc, _Impl>::Matrix(Matrix<T, _Alloc, _Impl>&& other)
     : _impl(std::move(other._impl))
   {
@@ -69,11 +60,27 @@ namespace numerical {
   template <class T,
             class _Alloc,
             class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator=(Matrix<T, _Alloc, _Impl>&& other)
+  void swap(Matrix<T, _Alloc, _Impl>& lhs,
+            Matrix<T, _Alloc, _Impl>& rhs)
   {
-    _impl = std::move(other._impl);
+    std::swap(lhs._impl, rhs._impl);
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  Matrix<T, _Alloc, _Impl>&
+  Matrix<T, _Alloc, _Impl>::operator=(Matrix<T, _Alloc, _Impl> other)
+  {
+    swap(*this, other);
     return *this;
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  Matrix<T, _Alloc, _Impl>::~Matrix()
+  {
   }
 
   template <class T,
@@ -203,10 +210,47 @@ namespace numerical {
             class _Alloc,
             class _Impl>
   Matrix<T, _Alloc, _Impl>
-  operator-(const Matrix<T, _Alloc, _Impl>& m)
+  Matrix<T, _Alloc, _Impl>::operator-()
   {
-    //-_impl;
-    return m;
+    Matrix<T, _Alloc, _Impl> result;
+    result._impl = -_impl;
+    return result;
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::iterator
+  begin(const Matrix<T, _Alloc, _Impl>& m)
+  {
+    return m.data();
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::const_iterator
+  cbegin(const Matrix<T, _Alloc, _Impl>& m)
+  {
+    return m.data();
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::iterator
+  end(const Matrix<T, _Alloc, _Impl>& m)
+  {
+    return m.data() + m.rows() * m.cols();
+  }
+
+  template <class T,
+            class _Alloc,
+            class _Impl>
+  typename Matrix<T, _Alloc, _Impl>::const_iterator
+  cend(const Matrix<T, _Alloc, _Impl>& m)
+  {
+    return m.data() + m.rows() * m.cols();
   }
 
   template <class T,
@@ -319,7 +363,7 @@ namespace numerical {
     return result *= scalar;
   }
 
-  template <class T, 
+  template <class T,
             class _Alloc,
             class _Impl>
   bool
