@@ -34,7 +34,9 @@ namespace numerical {
         : _allocator(),
           _rows(n), _cols(n),
           _data(_allocator.allocate(n*n))
-    {}
+    {
+      std::fill(begin(*this), end(*this), T());
+    }
 
     template <class T, class _Alloc>
     SerialMatrixImplementation<T,
@@ -43,7 +45,9 @@ namespace numerical {
         : _allocator(),
           _rows(rows), _cols(cols),
           _data(_allocator.allocate(rows*cols))
-    {}
+    {
+      std::fill(begin(*this), end(*this), T());
+    }
 
     template <class T, class _Alloc>
     void swap(SerialMatrixImplementation<T, _Alloc>& lhs,

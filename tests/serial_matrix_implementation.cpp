@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 #include <numerical/matrix.hpp>
 #include <numerical/matrix_generator.hpp>
+
 using namespace std;
 using numerical::Matrix;
 using numerical::impl::SerialMatrixImplementation;
@@ -25,7 +26,7 @@ using numerical::eye;
 using numerical::random;
 using std::allocator;
 
-static const size_t N = 2;
+static const size_t N = 256;
 
 typedef Matrix<float,
                allocator<float>,
