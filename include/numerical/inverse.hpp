@@ -14,25 +14,24 @@
     You should have received a copy of the GNU General Public License
     along with Fast Slater.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef NUMERICAL_DETERMINANT_HPP
-#define NUMERICAL_DETERMINANT_HPP
+#ifndef NUMERICAL_INVERSE_HPP
+#define NUMERICAL_INVERSE_HPP
 
 namespace numerical {
   template <class Matrix,
-            class DeterminantImpl = impl::GslDeterminantImplementation>
-  class Determinant {
+            class InverseImplementationType = impl::GslInverseImplementation>
+  class Inverse {
   public:
     typedef Matrix matrix_type;
-    typedef typename matrix_type::value_type value_type;
-    typedef DeterminantImpl determinant_implementation_type;
+    typedef InverseImplementationType inverse_implementation_type;
 
-    value_type operator()(const matrix_type&);
-    
+    matrix_type operator()(const matrix_type&);
+
   private:
-    determinant_implementation_type _impl;
+    inverse_implementation_type _impl;
   };
-}
+} 
 
-#include <implementation/determinant.cpp>
+#include <implementation/inverse.cpp>
 
 #endif
