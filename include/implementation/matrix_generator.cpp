@@ -63,14 +63,14 @@ namespace numerical {
         result(i,j) = Value;
     return result;
   }
-  
+
   template <class Matrix,
             class RNG>
   typename Matrix::value_type
   RandomMatrixGenerator<Matrix, RNG>::generate_random_value() const
   {
     return std::generate_canonical<typename Matrix::value_type,
-                                   sizeof(typename Matrix::value_type), 
+                                   sizeof(typename Matrix::value_type),
                                    RNG>(generator);
   }
 

@@ -25,7 +25,6 @@ namespace numerical {
 	struct IdentityMatrixGenerator {
 		Matrix operator()(const size_t n) const;
 		Matrix operator()(const size_t rows, const size_t cols) const;
-											
 	};
 
 	template <class Matrix, size_t Value>
@@ -77,7 +76,7 @@ namespace numerical {
 
 	template <class Matrix>
 	Matrix eye(const size_t n);
-	
+
 	template <class Matrix>
 	Matrix eye(const size_t rows, const size_t cols);
 }
