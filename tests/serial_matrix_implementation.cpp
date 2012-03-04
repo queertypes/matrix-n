@@ -30,8 +30,7 @@ static const size_t N = 256;
 
 typedef Matrix<float,
                allocator<float>,
-               SerialMatrixImplementation<float,
-                                          allocator<float>>> MatrixType;
+               SerialMatrixImplementation> MatrixType;
 
 TEST(test_matrix_constructors, default_constructor_square)
 {
