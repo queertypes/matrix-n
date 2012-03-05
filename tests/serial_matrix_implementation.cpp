@@ -28,8 +28,7 @@ using std::allocator;
 
 static const size_t N = 256;
 
-typedef Matrix<float,
-               allocator<float>,
+typedef Matrix<double,
                SerialMatrixImplementation> MatrixType;
 
 TEST(test_matrix_constructors, default_constructor_square)
@@ -229,60 +228,60 @@ TEST(test_matrix_binary_ops, matrix_matrix_multiply)
 TEST(test_matrix_binary_ops, matrix_scalar_add)
 {
   MatrixType a = ones<MatrixType>(N);
-  a = a + 1.0f;
+  a = a + 1.0;
 
   for (size_t i = 0; i < a.rows(); ++i)
     for (size_t j = 0; j < a.cols(); ++j)
-      EXPECT_FLOAT_EQ(a(i,j), 2.0f);
+      EXPECT_FLOAT_EQ(a(i,j), 2.0d);
 }
 
 TEST(test_matrix_binary_ops, matrix_scalar_subtract)
 {
   MatrixType a = ones<MatrixType>(N);
-  a = a - 1.0f;
+  a = a - 1.0;
 
   for (size_t i = 0; i < a.rows(); ++i)
     for (size_t j = 0; j < a.cols(); ++j)
-      EXPECT_FLOAT_EQ(a(i,j), 0ul);
+      EXPECT_FLOAT_EQ(a(i,j), 0.0d);
 }
 
 TEST(test_matrix_binary_ops, matrix_scalar_multiply)
 {
   MatrixType a = ones<MatrixType>(N);
-  a = a * 3.0f;
+  a = a * 3.0;
 
   for (size_t i = 0; i < a.rows(); ++i)
     for (size_t j = 0; j < a.cols(); ++j)
-      EXPECT_FLOAT_EQ(a(i,j), 3.0f);
+      EXPECT_FLOAT_EQ(a(i,j), 3.0);
 }
 TEST(test_matrix_binary_ops, scalar_matrix_add)
 {
   MatrixType a = ones<MatrixType>(N);
-  a = 1.0f + a;
+  a = 1.0 + a;
 
   for (size_t i = 0; i < a.rows(); ++i)
     for (size_t j = 0; j < a.cols(); ++j)
-      EXPECT_FLOAT_EQ(a(i,j), 2.0f);
+      EXPECT_FLOAT_EQ(a(i,j), 2.0);
 }
 
 TEST(test_matrix_binary_ops, scalar_matrix_subtract)
 {
   MatrixType a = ones<MatrixType>(N);
-  a = 3.0f - a;
+  a = 3.0 - a;
 
   for (size_t i = 0; i < a.rows(); ++i)
     for (size_t j = 0; j < a.cols(); ++j)
-      EXPECT_FLOAT_EQ(a(i,j), 2.0f);
+      EXPECT_FLOAT_EQ(a(i,j), 2.0);
 }
 
 TEST(test_matrix_binary_ops, scalar_matrix_multiply)
 {
   MatrixType a = ones<MatrixType>(N);
-  a = 10.0f * a;
+  a = 10.0 * a;
 
   for (size_t i = 0; i < a.rows(); ++i)
     for (size_t j = 0; j < a.cols(); ++j)
-      EXPECT_FLOAT_EQ(a(i,j), 10.0f);
+      EXPECT_FLOAT_EQ(a(i,j), 10.0);
 }
 
 int main(int argc, char **argv)

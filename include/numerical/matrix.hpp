@@ -22,9 +22,8 @@
 namespace numerical {
 
   template <class T,
-            class Allocator = std::allocator<T>,
-            template <class, class> class MatrixImpl = 
-              impl::SerialMatrixImplementation> 
+            template <class, class> class MatrixImpl = impl::SerialMatrixImplementation,
+            class Allocator = std::allocator<T> >
   class Matrix {
   public:
     typedef T value_type;
@@ -41,9 +40,9 @@ namespace numerical {
     Matrix(Matrix&& other);
     ~Matrix();
 
-    template <class _T, class _Alloc, template <class, class> class _Impl>
-    void friend swap(Matrix<_T, _Alloc, _Impl>&,
-                     Matrix<_T, _Alloc, _Impl>&);
+    template <class _T, template <class, class> class _Impl, class _Alloc>
+    void friend swap(Matrix<_T, _Impl, _Alloc>&,
+                     Matrix<_T, _Impl, _Alloc>&);
 
     Matrix& operator=(Matrix other);
 
@@ -61,11 +60,11 @@ namespace numerical {
     Matrix& operator*=(const T& other);
     Matrix& operator/=(const T& other);
 
-    template <class _T, class _Alloc, 
-              template <class, class> class _Impl>
-    friend bool 
-    operator==(const Matrix<_T, _Alloc, _Impl>&,
-               const Matrix<_T, _Alloc, _Impl>&);
+    template <class _T, template <class, class> class _Impl,
+              class _Alloc>
+    friend bool
+    operator==(const Matrix<_T, _Impl, _Alloc>&,
+               const Matrix<_T, _Impl, _Alloc>&);
 
   public:
     T* data() const;
@@ -78,97 +77,97 @@ namespace numerical {
   };
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::iterator
-  begin(const Matrix<T, _Alloc, _Impl>& m);
+            template <class, class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::iterator
+  begin(const Matrix<T, _Impl, _Alloc>& m);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::const_iterator
-  cbegin(const Matrix<T, _Alloc, _Impl>& m);
+            template <class, class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::const_iterator
+  cbegin(const Matrix<T, _Impl, _Alloc>& m);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::iterator
-  end(const Matrix<T, _Alloc, _Impl>& m);
+            template <class, class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::iterator
+  end(const Matrix<T, _Impl, _Alloc>& m);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::const_iterator
-  cend(const Matrix<T, _Alloc, _Impl>& m);
+            template <class, class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::const_iterator
+  cend(const Matrix<T, _Impl, _Alloc>& m);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator-(const Matrix<T, _Alloc, _Impl>&);
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator-(const Matrix<T, _Impl, _Alloc>&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator+(const Matrix<T, _Alloc, _Impl>&,
-            const Matrix<T, _Alloc, _Impl>&);
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator+(const Matrix<T, _Impl, _Alloc>&,
+            const Matrix<T, _Impl, _Alloc>&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator-(const Matrix<T, _Alloc, _Impl>&,
-            const Matrix<T, _Alloc, _Impl>&);
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator-(const Matrix<T, _Impl, _Alloc>&,
+            const Matrix<T, _Impl, _Alloc>&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator*(const Matrix<T, _Alloc, _Impl>&,
-            const Matrix<T, _Alloc, _Impl>&);
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator*(const Matrix<T, _Impl, _Alloc>&,
+            const Matrix<T, _Impl, _Alloc>&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator+(const Matrix<T, _Alloc, _Impl>&,
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator+(const Matrix<T, _Impl, _Alloc>&,
             const T&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator-(const Matrix<T, _Alloc, _Impl>&,
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator-(const Matrix<T, _Impl, _Alloc>&,
             const T&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator*(const Matrix<T, _Alloc, _Impl>&,
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator*(const Matrix<T, _Impl, _Alloc>&,
             const T&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
   operator+(const T&,
-            const Matrix<T, _Alloc, _Impl>&);
+            const Matrix<T, _Impl, _Alloc>&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
   operator-(const T&,
-            const Matrix<T, _Alloc, _Impl>&);
+            const Matrix<T, _Impl, _Alloc>&);
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
+            template <class, class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
   operator*(const T&,
-            const Matrix<T, _Alloc, _Impl>&);
+            const Matrix<T, _Impl, _Alloc>&);
 }
 
 #include <implementation/matrix.cpp>

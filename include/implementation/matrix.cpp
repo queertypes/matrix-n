@@ -17,358 +17,358 @@
 namespace numerical {
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>::Matrix()
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>::Matrix()
     : _impl()
   {
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>::Matrix(const size_t n)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>::Matrix(const size_t n)
     : _impl(n)
   {
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>::Matrix(const size_t rows,
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>::Matrix(const size_t rows,
                                    const size_t cols)
     : _impl(rows, cols)
   {
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>::Matrix(const Matrix<T, _Alloc, _Impl>& other)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>::Matrix(const Matrix<T, _Impl, _Alloc>& other)
     : _impl(other._impl)
   {
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>::Matrix(Matrix<T, _Alloc, _Impl>&& other)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>::Matrix(Matrix<T, _Impl, _Alloc>&& other)
     : _impl(std::move(other._impl))
   {
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  void swap(Matrix<T, _Alloc, _Impl>& lhs,
-            Matrix<T, _Alloc, _Impl>& rhs)
+            template <class,class> class _Impl,
+            class _Alloc>
+  void swap(Matrix<T, _Impl, _Alloc>& lhs,
+            Matrix<T, _Impl, _Alloc>& rhs)
   {
     std::swap(lhs._impl, rhs._impl);
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator=(Matrix<T, _Alloc, _Impl> other)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator=(Matrix<T, _Impl, _Alloc> other)
   {
     swap(*this, other);
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>::~Matrix()
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>::~Matrix()
   {
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
   T&
-  Matrix<T, _Alloc, _Impl>::operator()(const size_t row,
+  Matrix<T, _Impl, _Alloc>::operator()(const size_t row,
                                        const size_t col) const
   {
     return _impl(row, col);
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
   T&
-  Matrix<T, _Alloc, _Impl>::operator()(const size_t row,
+  Matrix<T, _Impl, _Alloc>::operator()(const size_t row,
                                        const size_t col)
   {
     return _impl(row, col);
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator+=(const Matrix<T, _Alloc, _Impl>& other)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator+=(const Matrix<T, _Impl, _Alloc>& other)
   {
     _impl += other._impl;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator-=(const Matrix<T, _Alloc, _Impl>& other)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator-=(const Matrix<T, _Impl, _Alloc>& other)
   {
     _impl -= other._impl;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator*=(const Matrix<T, _Alloc, _Impl>& other)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator*=(const Matrix<T, _Impl, _Alloc>& other)
   {
     _impl *= other._impl;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator+=(const T& scalar)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator+=(const T& scalar)
   {
     _impl += scalar;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator-=(const T& scalar)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator-=(const T& scalar)
   {
     _impl -= scalar;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator*=(const T& scalar)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator*=(const T& scalar)
   {
     _impl *= scalar;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>&
-  Matrix<T, _Alloc, _Impl>::operator/=(const T& scalar)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>&
+  Matrix<T, _Impl, _Alloc>::operator/=(const T& scalar)
   {
     _impl /= scalar;
     return *this;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  T* Matrix<T, _Alloc, _Impl>::data() const
+            template <class,class> class _Impl,
+            class _Alloc>
+  T* Matrix<T, _Impl, _Alloc>::data() const
   {
     return _impl.data();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  size_t Matrix<T, _Alloc, _Impl>::rows() const
+            template <class,class> class _Impl,
+            class _Alloc>
+  size_t Matrix<T, _Impl, _Alloc>::rows() const
   {
     return _impl.rows();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  size_t Matrix<T, _Alloc, _Impl>::cols() const
+            template <class,class> class _Impl,
+            class _Alloc>
+  size_t Matrix<T, _Impl, _Alloc>::cols() const
   {
     return _impl.cols();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
   constexpr _Alloc
-  Matrix<T, _Alloc, _Impl>::get_allocator() const
+  Matrix<T, _Impl, _Alloc>::get_allocator() const
   {
     return _impl.get_allocator();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  Matrix<T, _Alloc, _Impl>::operator-()
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  Matrix<T, _Impl, _Alloc>::operator-()
   {
-    Matrix<T, _Alloc, _Impl> result;
+    Matrix<T, _Impl, _Alloc> result;
     result._impl = -_impl;
     return result;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::iterator
-  begin(const Matrix<T, _Alloc, _Impl>& m)
+            template <class,class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::iterator
+  begin(const Matrix<T, _Impl, _Alloc>& m)
   {
     return m.data();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::const_iterator
-  cbegin(const Matrix<T, _Alloc, _Impl>& m)
+            template <class,class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::const_iterator
+  cbegin(const Matrix<T, _Impl, _Alloc>& m)
   {
     return m.data();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::iterator
-  end(const Matrix<T, _Alloc, _Impl>& m)
+            template <class,class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::iterator
+  end(const Matrix<T, _Impl, _Alloc>& m)
   {
     return m.data() + m.rows() * m.cols();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  typename Matrix<T, _Alloc, _Impl>::const_iterator
-  cend(const Matrix<T, _Alloc, _Impl>& m)
+            template <class,class> class _Impl,
+            class _Alloc>
+  typename Matrix<T, _Impl, _Alloc>::const_iterator
+  cend(const Matrix<T, _Impl, _Alloc>& m)
   {
     return m.data() + m.rows() * m.cols();
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator+(const Matrix<T, _Alloc, _Impl>& lhs,
-            const Matrix<T, _Alloc, _Impl>& rhs)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator+(const Matrix<T, _Impl, _Alloc>& lhs,
+            const Matrix<T, _Impl, _Alloc>& rhs)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result += rhs;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator-(const Matrix<T, _Alloc, _Impl>& lhs,
-            const Matrix<T, _Alloc, _Impl>& rhs)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator-(const Matrix<T, _Impl, _Alloc>& lhs,
+            const Matrix<T, _Impl, _Alloc>& rhs)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result -= rhs;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator*(const Matrix<T, _Alloc, _Impl>& lhs,
-            const Matrix<T, _Alloc, _Impl>& rhs)
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator*(const Matrix<T, _Impl, _Alloc>& lhs,
+            const Matrix<T, _Impl, _Alloc>& rhs)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result *= rhs;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator+(const Matrix<T, _Alloc, _Impl>& lhs,
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator+(const Matrix<T, _Impl, _Alloc>& lhs,
             const T& scalar)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result += scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator-(const Matrix<T, _Alloc, _Impl>& lhs,
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator-(const Matrix<T, _Impl, _Alloc>& lhs,
             const T& scalar)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result -= scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator*(const Matrix<T, _Alloc, _Impl>& lhs,
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator*(const Matrix<T, _Impl, _Alloc>& lhs,
             const T& scalar)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result *= scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
-  operator/(const Matrix<T, _Alloc, _Impl>& lhs,
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
+  operator/(const Matrix<T, _Impl, _Alloc>& lhs,
             const T& scalar)
   {
-    Matrix<T, _Alloc, _Impl> result(lhs);
+    Matrix<T, _Impl, _Alloc> result(lhs);
     return result /= scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
   operator+(const T& scalar,
-            const Matrix<T, _Alloc, _Impl>& rhs)
+            const Matrix<T, _Impl, _Alloc>& rhs)
   {
-    Matrix<T, _Alloc, _Impl> result(rhs);
+    Matrix<T, _Impl, _Alloc> result(rhs);
     return result += scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
   operator-(const T& scalar,
-            const Matrix<T, _Alloc, _Impl>& rhs)
+            const Matrix<T, _Impl, _Alloc>& rhs)
   {
-    Matrix<T, _Alloc, _Impl> result(rhs);
+    Matrix<T, _Impl, _Alloc> result(rhs);
     return (-result) += scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
-  Matrix<T, _Alloc, _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
+  Matrix<T, _Impl, _Alloc>
   operator*(const T& scalar,
-            const Matrix<T, _Alloc, _Impl>& rhs)
+            const Matrix<T, _Impl, _Alloc>& rhs)
   {
-    Matrix<T, _Alloc, _Impl> result(rhs);
+    Matrix<T, _Impl, _Alloc> result(rhs);
     return result *= scalar;
   }
 
   template <class T,
-            class _Alloc,
-            template <class, class> class _Impl>
+            template <class,class> class _Impl,
+            class _Alloc>
   bool
-  operator==(const Matrix<T, _Alloc, _Impl>& lhs,
-             const Matrix<T, _Alloc, _Impl>& rhs)
+  operator==(const Matrix<T, _Impl, _Alloc>& lhs,
+             const Matrix<T, _Impl, _Alloc>& rhs)
   {
     return lhs._impl == rhs._impl;
   }
