@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 #include <numerical/matrix.hpp>
 #include <numerical/matrix_generator.hpp>
+#include <numerical/matrix/serial_matrix_implementation.hpp>
 
 using namespace std;
 using numerical::Matrix;

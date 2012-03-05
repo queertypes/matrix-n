@@ -17,12 +17,10 @@
 #ifndef NUMERICAL_MATRIX_HPP
 #define NUMERICAL_MATRIX_HPP
 
-#include <numerical/matrix/serial_matrix_implementation.hpp>
-
 namespace numerical {
 
   template <class T,
-            template <class, class> class MatrixImpl = impl::SerialMatrixImplementation,
+            template <class, class> class MatrixImpl,
             class Allocator = std::allocator<T> >
   class Matrix {
   public:

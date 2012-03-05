@@ -18,8 +18,12 @@
 #include <iostream>
 #include <numerical/matrix.hpp>
 #include <numerical/matrix_generator.hpp>
+#include <numerical/matrix/serial_matrix_implementation.hpp>
 using namespace std;
 using namespace numerical;
+using impl::SerialMatrixImplementation;
+
+typedef Matrix<double, SerialMatrixImplementation> MatrixType;
 
 void parse_args(const int argc, const char *const *const argv,
                 size_t &n, size_t &m)
@@ -52,27 +56,23 @@ int main(int argc, char **argv)
   }
 
   printf("Running simultaion with %u electrons for %u steps\n", n, m);
-  Matrix<float> D(n,m);
-  //Matrix<float> D = random<Matrix<float>>(n);
-  //Matrix<float> v = random<Matrix<float>>(1, n);
+  auto D = random<MatrixType>(n);
+  auto v = random<MatrixType>(1, n);
 
   cout << D.rows() << " " << D.cols() << endl;
 
-  /*
+  cout << "\nD =\n";
   for (size_t i = 0; i < n; ++i) {
     for (size_t j = 0; j < n; ++j) {
       cout << D(i,j) << " ";
     }
     cout << "\n";
   }
-  */
 
-  /*
-  cout << "\n";
+  cout << "\nv = [";
   for (size_t i = 0; i < n; ++i)
     cout << v(0,i) << " ";
-  cout << "\n";
-  */
+  cout << "]\n";
 
   return 0;
 }
