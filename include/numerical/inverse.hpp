@@ -19,9 +19,15 @@
 
 namespace numerical {
   template <class Matrix,
-            class InverseImplementationType = impl::GslInverseImplementation>
+            class InverseImplementationType>
   class Inverse {
   public:
+    Inverse() = default;
+    ~Inverse() = default;
+    Inverse(const Inverse&) = delete;
+    Inverse(Inverse&&) = delete;
+    Inverse& operator=(Inverse) = delete;
+
     typedef Matrix matrix_type;
     typedef InverseImplementationType inverse_implementation_type;
 
@@ -30,7 +36,7 @@ namespace numerical {
   private:
     inverse_implementation_type _impl;
   };
-} 
+}
 
 #include <implementation/inverse.cpp>
 
