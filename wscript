@@ -8,10 +8,13 @@ AMD_OPENCL_PATH = '/opt/AMDAPP/include'
 NEEDED_TR1_LIBS = frozenset(['random', 'numeric',
                              'chrono', 'functional'])
 
+def contains(haystack, needle):
+  return haystack.count(needle) > 0
+
 def options(opt):
   opt.load('compiler_cxx waf_unit_test')
 
-def try_file(ctx, file_name, 
+def try_file(ctx, file_name,
              is_mandatory=False):
   feature_name = basename(file_name).replace('.cpp', '')
   def_name = ('HAS_' + feature_name.upper())
@@ -21,7 +24,7 @@ def try_file(ctx, file_name,
     data = f.readlines()
   return ctx.check_cxx(fragment=''.join(data), define_name=def_name,
                        msg = '  ' + feature_msg,
-                       cxxflags='-std=c++0x', 
+                       cxxflags='-std=c++0x',
                        mandatory=is_mandatory)
 
 def configure(cfg):
@@ -38,19 +41,19 @@ def configure(cfg):
 
   # check for c++-tr1 libraries
   print('==Checking for c++-tr1 headers ==')
-  [cfg.check_cxx(header_name=x, msg='  ' + x, 
-                 cxxflags='-std=c++0x', 
+  [cfg.check_cxx(header_name=x, msg='  ' + x,
+                 cxxflags='-std=c++0x',
                  define_name='HAS_' + x.upper()) for x in NEEDED_TR1_LIBS]
   print
 
   print('== Checking for c++ steady clock definition ==')
   if try_file(cfg, path_join(path, 'clock_tests', 'steady_clock.cpp')) is None:
-    try_file(cfg, path_join(path, 'clock_tests', 'monotonic_clock.cpp'), 
+    try_file(cfg, path_join(path, 'clock_tests', 'monotonic_clock.cpp'),
              is_mandatory=True)
   print
 
   # optional libraries
-  cfg.check_cxx(header_name='CL/cl.h', 
+  cfg.check_cxx(header_name='CL/cl.h',
                 includes=AMD_OPENCL_PATH,
                 mandatory=False, define_name='HAS_OPENCL',
                 msg='Checking for OpenCL')
@@ -60,7 +63,7 @@ def configure(cfg):
   print('== Checking for c++11 features ==')
   [try_file(cfg,path_join(path,x)) for x in os_listdir(path) if x.endswith('.cpp')]
   print
-  
+
   cfg.write_config_header('../include/config.h')
   print('Wrote configuration to include/config.h')
 
@@ -71,10 +74,14 @@ def build(bld):
               cxxflags='-Wall -Wextra -pedantic -ansi -O2 -std=c++0x -g')
 
   for test in os_listdir('tests'):
+    libs = ['gtest']
+
+    if contains(test, 'gsl'):
+      libs += ['gsl', 'gslcblas']
+
     bld.program(source=path_join('tests', test),
                 cxxflags='-Wall -Wextra -g -O2 -std=c++0x',
                 includes='include',
                 libpath='../lib',
-                lib='gtest',
+                lib=libs,
                 target=path_join('tests', test.replace('.cpp','')))
-

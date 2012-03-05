@@ -19,13 +19,11 @@
 #include <numerical/matrix_generator.hpp>
 #include <numerical/matrix/serial_matrix_implementation.hpp>
 
-using namespace std;
 using numerical::Matrix;
 using numerical::impl::SerialMatrixImplementation;
 using numerical::ones;
 using numerical::eye;
 using numerical::random;
-using std::allocator;
 
 static const size_t N = 256;
 

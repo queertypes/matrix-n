@@ -15,4 +15,11 @@
     along with Fast Slater.  If not, see <http://www.gnu.org/licenses/>.
  */
 namespace numerical {
+  
+  template <class _Mat, class _Impl>
+  typename _Mat::value_type
+  Determinant<_Mat, _Impl>::operator()(const _Mat& m)
+  {
+    return _impl(m);
+  }
 }

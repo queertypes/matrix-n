@@ -50,6 +50,7 @@ namespace numerical {
       i = Value;
     return result;
   }
+
   template <class Matrix,
             size_t Value>
   Matrix

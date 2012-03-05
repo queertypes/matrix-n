@@ -19,15 +19,21 @@
 
 namespace numerical {
   template <class Matrix,
-            class DeterminantImpl = impl::GslDeterminantImplementation>
+            class DeterminantImpl>
   class Determinant {
   public:
+    Determinant() = default;
+    ~Determinant() = default;
+    Determinant(const Determinant&) = delete;
+    Determinant(Determinant&&) = delete;
+    Determinant& operator=(Determinant) = delete;
+
     typedef Matrix matrix_type;
     typedef typename matrix_type::value_type value_type;
     typedef DeterminantImpl determinant_implementation_type;
 
     value_type operator()(const matrix_type&);
-    
+
   private:
     determinant_implementation_type _impl;
   };
