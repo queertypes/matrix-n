@@ -63,6 +63,19 @@ namespace numerical {
     return result;
   }
 
+  template <class Matrix>
+  Matrix
+  UnitVectorGenerator<Matrix>::operator()(const size_t cols,
+                                          const size_t index)
+  {
+    Matrix result(1, cols);
+
+    assert(index < cols);
+    result(0,index) = 1;
+
+    return result;
+  }
+
   template <class Matrix,
             class RNG>
   typename Matrix::value_type
@@ -156,5 +169,12 @@ namespace numerical {
   Matrix eye(const size_t rows, const size_t cols) {
     return generate_matrix<Matrix,
                            IdentityMatrixGenerator<Matrix>>(rows, cols);
+  }
+
+  template <class Matrix>
+  Matrix unit(const size_t cols, const size_t index)
+  {
+    static UnitVectorGenerator<Matrix> g;
+    return g(cols, index);
   }
 }
