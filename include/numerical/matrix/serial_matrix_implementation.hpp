@@ -27,14 +27,12 @@ namespace numerical {
     class SerialMatrixImplementation {
 
     public:
-
       typedef T value_type;
       typedef T* iterator;
       typedef const T *const const_iterator;
       typedef Allocator allocator_type;
 
     public:
-
       SerialMatrixImplementation();
       explicit SerialMatrixImplementation(const size_t n);
       SerialMatrixImplementation(const size_t rows,

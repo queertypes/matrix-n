@@ -39,25 +39,30 @@ namespace qmc {
 
       while (step < numSteps) {
         p = (++p % numElectrons);
-        
+
         //result(p,:) += V(step, :);
-        result.row(p) = result.row(p) + V.row(step);
+        //result.row(p) += V.row(step);
+        for (size_t i = 0; i < result.cols(); ++i)
+          result(p,i) = V(step, i);
 
         const double R = det(result) / det(D_curr);
-        
+
         if (abs(R) > threshold) {
           //D_curr(p,:) = result(p,:);
-          D_curr.row(p) = result.row(p);
-          
+          //D_curr.row(p) = result.row(p);
+          for (size_t i = 0; i < D_curr.cols(); ++i)
+            D_curr(p,i) = result(p,i);
+
           ++step;
         } else {
           //result(p,:) = D_curr(p,:);
-          result.row(p) = D_curr.row(p);
+          //result.row(p) = D_curr.row(p);
+          for (size_t i = 0; i < D_curr.cols(); ++i)
+            result(p,i) = D_curr(p,i);
         }
       }
 
       return result;
     }
-
   }
 }
