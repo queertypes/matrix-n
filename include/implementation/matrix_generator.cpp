@@ -16,6 +16,7 @@
  */
 #include <random>
 #include <numeric>
+#include <cassert>
 
 namespace numerical {
 
@@ -66,7 +67,7 @@ namespace numerical {
   template <class Matrix>
   Matrix
   UnitVectorGenerator<Matrix>::operator()(const size_t cols,
-                                          const size_t index)
+                                          const size_t index) const
   {
     Matrix result(1, cols);
 
