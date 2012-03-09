@@ -1,17 +1,17 @@
  /*
   Matrix N - generic matrix library offering compile-time implementation choices
   Copyright (C) 2012 Alejandro Cabrera
-  
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,11 +30,30 @@ namespace numerical {
     typedef typename MatrixImpl<T, Allocator>::const_iterator const_iterator;
     typedef Allocator allocator_type;
     typedef MatrixImpl<T, Allocator> matrix_implementation_type;
+    typedef RowView<T, MatrixImpl, Allocator> row_view_type;
+    typedef ColumnView<T, MatrixImpl, Allocator> column_view_type;
 
   public:
     Matrix();
     explicit Matrix(const size_t n);
     Matrix(const size_t rows, const size_t cols);
+
+    template <typename InputIterator>
+    Matrix(const InputIterator begin,
+           const InputIterator end,
+           const size_t n);
+
+    template <typename InputIterator>
+    Matrix(const InputIterator begin,
+           const InputIterator end,
+           const size_t rows, const size_t cols);
+
+    Matrix(const std::initializer_list<T>&,
+           const size_t n);
+
+    Matrix(const std::initializer_list<T>&,
+           const size_t rows, const size_t cols);
+
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     ~Matrix();
@@ -65,11 +84,13 @@ namespace numerical {
     operator==(const Matrix<_T, _Impl, _Alloc>&,
                const Matrix<_T, _Impl, _Alloc>&);
 
-  public:
     T* data() const;
     size_t rows() const;
     size_t cols() const;
     constexpr allocator_type get_allocator() const;
+
+    row_view_type row(const size_t n) const;
+    column_view_type col(const size_t n) const;
 
   private:
     matrix_implementation_type _impl;
