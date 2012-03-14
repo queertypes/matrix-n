@@ -18,6 +18,8 @@
 #ifndef NUMERICAL_MATRIX_HPP
 #define NUMERICAL_MATRIX_HPP
 
+#include <numerical/detail/matrix_view.hpp>
+
 namespace numerical {
 
   template <class T,
@@ -30,8 +32,8 @@ namespace numerical {
     typedef typename MatrixImpl<T, Allocator>::const_iterator const_iterator;
     typedef Allocator allocator_type;
     typedef MatrixImpl<T, Allocator> matrix_implementation_type;
-    typedef RowView<T, MatrixImpl, Allocator> row_view_type;
-    typedef ColumnView<T, MatrixImpl, Allocator> column_view_type;
+    typedef detail::RowView<T> row_view_type;
+    typedef detail::ColumnView<T> column_view_type;
 
   public:
     Matrix();

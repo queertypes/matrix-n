@@ -17,121 +17,144 @@
 */
 #ifndef NUMERICAL_DETAIL_MATRIX_VIEW_HPP
 #define NUMERICAL_DETAIL_MATRIX_VIEW_HPP
+#include <iterator>
 
 namespace numerical {
   namespace detail {
-    template <class T,
-              template <class,class> class ViewImpl,
-              class Allocator = std::allocator<T>>
+    template <class T>
     class RowView {
     public:
       typedef T value_type;
+      typedef T* pointer;
+
       typedef T* iterator;
-      typedef const T *const const_iterator;
-      typedef ViewImpl<T, Allocator> view_implementation_type;
-      typedef Allocator allocator_type;
+      typedef const T * const_iterator;
+      typedef std::random_access_iterator_tag iterator_category;
 
-      RowView();
-      RowView(const RowView&);
-      RowView(RowView&&);
-      ~RowView();
+      RowView() = default;
+      ~RowView() = default;
+      RowView(const RowView&) = default;
+      RowView(RowView&&) =  default;
 
-      template <class _T, template <class,class> class _Impl, class _Alloc>
-      void friend swap(RowView<_T, _Impl<_T, _Alloc>, _Alloc>&,
-                       RowView<_T, _Impl<_T, _Alloc>, _Alloc>&);
+      RowView(iterator begin, const size_t cols);
 
       RowView& operator=(RowView);
       RowView& operator+=(const RowView&);
       RowView& operator-=(const RowView&);
 
-      iterator begin() const;
-      iterator end() const;
-      const_iterator cbegin() const;
-      const_iterator cend() const;
+      value_type operator()(const size_t index);
+      const value_type operator()(const size_t index) const;
 
-      T operator()(const size_t index);
-      const T operator()(const size_t index) const;
-
+      pointer data() const;
       size_t cols() const;
 
     private:
-      view_implementation_type _impl;
+      size_t _cols;
+      pointer _data;
     };
 
-    template <class T,
-              template <class,class> class ViewImpl,
-              class Allocator = std::allocator<T>>
+    template <class T>
+    typename RowView<T>::iterator
+    begin(const RowView<T>&);
+
+    template <class T>
+    typename RowView<T>::const_iterator
+    cbegin(const RowView<T>&);
+
+    template <class T>
+    typename RowView<T>::iterator
+    end(const RowView<T>&);
+
+    template <class T>
+    typename RowView<T>::const_iterator
+    cend(const RowView<T>&);
+
+    template <class T>
+    RowView<T> operator+(const RowView<T>&, const RowView<T>&);
+
+    template <class T>
+    RowView<T> operator-(const RowView<T>&, const RowView<T>&);
+
+    template <class T>
     class ColumnView {
     public:
       typedef T value_type;
-      typedef T* iterator;
-      typedef const T *const const_iterator;
-      typedef ViewImpl<T, Allocator> view_implementation_type;
-      typedef Allocator allocator_type;
 
-      ColumnView();
-      ColumnView(const ColumnView&);
-      ColumnView(ColumnView&&);
-      ~ColumnView();
+      struct ColumnIterator;
 
-      template <class _T, template <class,class> class _Impl, class _Alloc>
-      void friend swap(ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>&,
-                       ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>&);
+      typedef ColumnIterator iterator;
+      typedef const ColumnIterator const_iterator;
 
-      ColumnView& operator=(ColumnView);
+      ColumnView() = default;
+      ColumnView(const ColumnView&) = default;
+      ColumnView(ColumnView&&) = default;
+      ~ColumnView() = default;
+      ColumnView& operator=(const ColumnView&) = default;
+
+      ColumnView(const T *const begin,
+                 const size_t rows, const size_t cols);
+
       ColumnView& operator+=(const ColumnView&);
       ColumnView& operator-=(const ColumnView&);
-
-      iterator begin() const;
-      iterator end() const;
-      const_iterator cbegin() const;
-      const_iterator cend() const;
 
       T operator()(const size_t index);
       const T operator()(const size_t index) const;
 
-      size_t rows() const;
+      struct ColumnIterator {
+        typedef T value_type;
+        typedef T* pointer;
+        typedef T& reference;
+
+        typedef std::random_access_iterator_tag iterator_category;
+
+        ColumnIterator() = default;
+        ~ColumnIterator() = default;
+
+        ColumnIterator(const ColumnIterator&) = default;
+        ColumnIterator(ColumnIterator&&) = default;
+        ColumnIterator& operator=(const ColumnIterator&) = default;
+
+        ColumnIterator(const T *const begin,
+                       const size_t rows, const size_t cols);
+
+        ColumnIterator& operator++();
+        ColumnIterator operator++(int);
+        ColumnIterator& operator--();
+        ColumnIterator operator--(int);
+
+        reference operator*() const;
+        pointer operator->() const;
+
+      private:
+        size_t _cols, _rows;
+        pointer _data;
+      };
 
     private:
-      //some means of iterating over data to reach all rows in given column
-
-    private:
-      view_implementation_type _impl;
+      iterator _data;
     };
 
-    template <class _T, template <class,class> _Impl, class _Alloc>
-    RowView operator+(const RowView<_T, _Impl<_T, _Alloc>, _Alloc>& lhs,
-                      const RowView<_T, _Impl<_T, _Alloc>, _Alloc>& rhs);
+    template <class T>
+    typename ColumnView<T>::iterator
+    begin(const ColumnView<T>&);
 
-    template <class _T, template <class,class> _Impl, class _Alloc>
-    RowView operator-(const RowView<_T, _Impl<_T, _Alloc>, _Alloc>& lhs,
-                      const RowView<_T, _Impl<_T, _Alloc>, _Alloc>& rhs);
+    template <class T>
+    typename ColumnView<T>::const_iterator
+    cbegin(const ColumnView<T>&);
 
-    template <class _T, template <class,class> _Impl, class _Alloc>
-    ColumnView operator+(const ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>& lhs,
-                         const ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>& rhs);
+    template <class T>
+    typename ColumnView<T>::iterator
+    end(const ColumnView<T>&);
 
-    template <class _T, template <class,class> _Impl, class _Alloc>
-    ColumnView operator-(const ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>& lhs,
-                         const ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>& rhs);
+    template <class T>
+    typename ColumnView<T>::const_iterator
+    cend(const ColumnView<T>&);
 
-    template <class _T, template <class,class> _Impl, class _Alloc,
-              template <class,class,class> _Matrix>
-    _Matrix<_T,
-            typename detail::MatrixImplementationTraits<_Impl<_T,
-              _Alloc>>::matrix_implementation_type,
-            _Alloc>
-    operator*(const ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>& lhs,
-              const RowView<_T, _Impl<_T, _Alloc>, _Alloc>& rhs);
+    template <class T>
+    ColumnView<T> operator+(const ColumnView<T>&, const ColumnView<T>&);
 
-    template <class _T, template <class,class> _Impl, class _Alloc,
-              template <class,class,class> _Matrix>
-    _Matrix<_T,
-            typename detail::MatrixImplementationTraits<_Impl<_T,
-              _Alloc>>::matrix_implementation_type,
-            _Alloc>
-    operator*(const RowView<_T, _Impl<_T, _Alloc>, _Alloc>& lhs,
-              const ColumnView<_T, _Impl<_T, _Alloc>, _Alloc>& rhs);
+    template <class T>
+    ColumnView<T> operator-(const ColumnView<T>&, const ColumnView<T>&);
   }
 }
 

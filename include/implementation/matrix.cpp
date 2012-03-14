@@ -207,6 +207,26 @@ namespace numerical {
   }
 
   template <class T,
+            template <class, class> class _Impl,
+            class _Alloc>
+  detail::RowView<T>
+  Matrix<T, _Impl, _Alloc>::row(const size_t index) const
+  {
+    return detail::RowView<T>(begin(_impl) + (index * _impl.cols()),
+                              _impl.cols());
+  }
+
+  template <class T,
+            template <class, class> class _Impl,
+            class _Alloc>
+  detail::ColumnView<T>
+  Matrix<T, _Impl, _Alloc>::col(const size_t index) const
+  {
+    return detail::ColumnView<T>(begin(_impl) + index,
+                                 _impl.rows(), _impl.cols());
+  }
+
+  template <class T,
             template <class,class> class _Impl,
             class _Alloc>
   Matrix<T, _Impl, _Alloc>

@@ -20,6 +20,8 @@
 #include <numerical/matrix/serial_matrix_implementation.hpp>
 
 using numerical::Matrix;
+using numerical::detail::RowView;
+using numerical::detail::ColumnView;
 using numerical::impl::SerialMatrixImplementation;
 using numerical::ones;
 using numerical::eye;
@@ -30,13 +32,13 @@ static const size_t N = 256;
 
 typedef Matrix<double,
                SerialMatrixImplementation> MatrixType;
-typedef typename MatrixType::row_view_implementation_type RowType;
-typedef typename MatrixType::column_view_implementation_type ColumnType;
+typedef RowView<double> RowType;
+typedef ColumnView<double> ColumnType;
 
 TEST(test_matrix_view_generation, row_view_generation)
 {
   MatrixType m(2);
-  
+
   m(0,0) = 1.0d;
   m(0,1) = 2.0d;
   m(1,0) = 3.0d;
@@ -44,36 +46,18 @@ TEST(test_matrix_view_generation, row_view_generation)
 
   RowType r1 = m.row(0);
   RowType r2 = m.row(1);
-  
+
   EXPECT_EQ(r1(0), m(0,0));
   EXPECT_EQ(r1(1), m(0,1));
   EXPECT_EQ(r2(0), m(1,0));
   EXPECT_EQ(r2(1), m(1,1));
 }
 
-TEST(test_matrix_view_generation, column_view_generation)
-{
-  MatrixType m(2);
-  
-  m(0,0) = 1.0d;
-  m(0,1) = 2.0d;
-  m(1,0) = 3.0d;
-  m(1,1) = 4.0d;
-
-  ColumnType c1 = m.col(0);
-  ColumnType c2 = m.col(1);
-  
-  EXPECT_EQ(c1(0), m(0,0));
-  EXPECT_EQ(c1(1), m(1,0));
-  EXPECT_EQ(c2(0), m(0,1));
-  EXPECT_EQ(c2(1), m(1,1));
-}
-
 TEST(test_matrix_view_assignment, row_assignment)
 {
   MatrixType m1 = zeros<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);;
-  
+
   m1.row(0) = m2.row(1);
 
   // row assignment works
@@ -85,17 +69,101 @@ TEST(test_matrix_view_assignment, row_assignment)
   EXPECT_FLOAT_EQ(m1(1,1), 0.0d);
 
   // row assignment does not affect rhs
-  EXPECT_FLOAT_EQ(m2(0,0), 1.0d);
-  EXPECT_FLOAT_EQ(m2(0,1), 1.0d);
-  EXPECT_FLOAT_EQ(m2(1,0), 1.0d);
-  EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
+  std::for_each(cbegin(m2), cend(m2),
+                [](const double x) {EXPECT_FLOAT_EQ(x, 1.0d); });
+}
+
+TEST(test_matrix_view_assignment, row_add_assignment)
+{
+  MatrixType m1 = ones<MatrixType>(2);
+  MatrixType m2 = ones<MatrixType>(2);;
+
+  m1.row(0) += m2.row(1);
+
+  // row add assignment works
+  EXPECT_FLOAT_EQ(m1(0,0), 2.0d);
+  EXPECT_FLOAT_EQ(m1(0,1), 2.0d);
+
+  // row add assignment only affects target row
+  EXPECT_FLOAT_EQ(m1(1,0), 1.0d);
+  EXPECT_FLOAT_EQ(m1(1,1), 1.0d);
+
+  // row add assignment does not affect rhs
+  std::for_each(cbegin(m2), cend(m2),
+                [](const double x) {EXPECT_FLOAT_EQ(x, 1.0d); });
+}
+
+TEST(test_matrix_view_assignment, row_subtract_assignment)
+{
+  MatrixType m1 = zeros<MatrixType>(2);
+  MatrixType m2 = ones<MatrixType>(2);;
+
+  m1.row(0) -= m2.row(1);
+
+  // row subtract assignment works
+  EXPECT_FLOAT_EQ(m1(0,0), -1.0d);
+  EXPECT_FLOAT_EQ(m1(0,1), -1.0d);
+
+  // row subtract assignment only affects target row
+  EXPECT_FLOAT_EQ(m1(1,0), 0.0d);
+  EXPECT_FLOAT_EQ(m1(1,1), 0.0d);
+
+  // row subtract assignment does not affect rhs
+  std::for_each(cbegin(m2), cend(m2),
+                [](const double x) {EXPECT_FLOAT_EQ(x, 1.0d); });
+}
+
+TEST(test_matrix_view_ops, row_addition)
+{
+  MatrixType m1 = ones<MatrixType>(2);
+  MatrixType m2 = ones<MatrixType>(2);
+  MatrixType m3(2);
+
+  m3.row(0) = m1.row(0) + m2.row(0);
+  m3.row(1) = m1.row(1) + m2.row(1);
+
+  std::for_each(cbegin(m3), cend(m3),
+                [](const double x) {EXPECT_FLOAT_EQ(x, 2.0d); });
+}
+
+
+TEST(test_matrix_view_ops, row_subtraction)
+{
+  MatrixType m1 = zeros<MatrixType>(2);
+  MatrixType m2 = ones<MatrixType>(2);
+  MatrixType m3(2);
+
+  m3.row(0) = m1.row(0) - m2.row(0);
+  m3.row(1) = m1.row(1) - m2.row(1);
+
+  std::for_each(cbegin(m3), cend(m3),
+                [](const double x) {EXPECT_FLOAT_EQ(x, -1.0d); });
+}
+
+/*
+TEST(test_matrix_view_generation, column_view_generation)
+{
+  MatrixType m(2);
+
+  m(0,0) = 1.0d;
+  m(0,1) = 2.0d;
+  m(1,0) = 3.0d;
+  m(1,1) = 4.0d;
+
+  ColumnType c1 = m.col(0);
+  ColumnType c2 = m.col(1);
+
+  EXPECT_EQ(c1(0), m(0,0));
+  EXPECT_EQ(c1(1), m(1,0));
+  EXPECT_EQ(c2(0), m(0,1));
+  EXPECT_EQ(c2(1), m(1,1));
 }
 
 TEST(test_matrix_view_assignment, column_assignment)
 {
   MatrixType m1 = zeros<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);;
-  
+
   m1.col(0) = m2.col(1);
 
   // column assignment works
@@ -113,33 +181,11 @@ TEST(test_matrix_view_assignment, column_assignment)
   EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
 }
 
-TEST(test_matrix_view_assignment, row_add_assignment)
-{
-  MatrixType m1 = ones<MatrixType>(2);
-  MatrixType m2 = ones<MatrixType>(2);;
-  
-  m1.row(0) += m2.row(1);
-
-  // row add assignment works
-  EXPECT_FLOAT_EQ(m1(0,0), 2.0d);
-  EXPECT_FLOAT_EQ(m1(0,1), 2.0d);
-
-  // row add assignment only affects target row
-  EXPECT_FLOAT_EQ(m1(1,0), 1.0d);
-  EXPECT_FLOAT_EQ(m1(1,1), 1.0d);
-
-  // row add assignment does not affect rhs
-  EXPECT_FLOAT_EQ(m2(0,0), 1.0d);
-  EXPECT_FLOAT_EQ(m2(0,1), 1.0d);
-  EXPECT_FLOAT_EQ(m2(1,0), 1.0d);
-  EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
-}
-
 TEST(test_matrix_view_assignment, column_add_assignment)
 {
   MatrixType m1 = ones<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);;
-  
+
   m1.col(0) += m2.col(1);
 
   // column add assignment works
@@ -157,33 +203,11 @@ TEST(test_matrix_view_assignment, column_add_assignment)
   EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
 }
 
-TEST(test_matrix_view_assignment, row_subtract_assignment)
-{
-  MatrixType m1 = zeros<MatrixType>(2);
-  MatrixType m2 = ones<MatrixType>(2);;
-  
-  m1.row(0) -= m2.row(1);
-
-  // row subtract assignment works
-  EXPECT_FLOAT_EQ(m1(0,0), -1.0d);
-  EXPECT_FLOAT_EQ(m1(0,1), -1.0d);
-
-  // row subtract assignment only affects target row
-  EXPECT_FLOAT_EQ(m1(1,0), 0.0d);
-  EXPECT_FLOAT_EQ(m1(1,1), 0.0d);
-
-  // row subtract assignment does not affect rhs
-  EXPECT_FLOAT_EQ(m2(0,0), 1.0d);
-  EXPECT_FLOAT_EQ(m2(0,1), 1.0d);
-  EXPECT_FLOAT_EQ(m2(1,0), 1.0d);
-  EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
-}
-
 TEST(test_matrix_view_assignment, column_subtract_assignment)
 {
   MatrixType m1 = zeros<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);;
-  
+
   m1.col(0) += m2.col(1);
 
   // column subtract assignment works
@@ -201,43 +225,17 @@ TEST(test_matrix_view_assignment, column_subtract_assignment)
   EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
 }
 
-TEST(test_matrix_view_ops, row_addition)
-{
-  MatrixType m1 = ones<MatrixType>(2);
-  MatrixType m2 = ones<MatrixType>(2);
-  MatrixType m3(2);
-
-  m3.row(0) = m1.row(0) + m2.row(0);
-  m3.row(1) = m1.row(1) + m2.row(1);
-
-  for (auto iter = cbegin(m3), iend = cend(m3); iter != iend; ++iter)
-    EXPECT_FLOAT_EQ(*iter, 2.0d);
-}
-
 TEST(test_matrix_view_ops, column_addition)
 {
   MatrixType m1 = ones<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);
   MatrixType m3(2);
 
-  m3.column(0) = m1.column(0) + m2.column(0);
-  m3.column(1) = m1.column(1) + m2.column(1);
+  m3.col(0) = m1.col(0) + m2.col(0);
+  m3.col(1) = m1.col(1) + m2.col(1);
 
   for (auto iter = cbegin(m3), iend = cend(m3); iter != iend; ++iter)
     EXPECT_FLOAT_EQ(*iter, 2.0d);
-}
-
-TEST(test_matrix_view_ops, row_subtraction)
-{
-  MatrixType m1 = zeros<MatrixType>(2);
-  MatrixType m2 = ones<MatrixType>(2);
-  MatrixType m3(2);
-
-  m3.row(0) = m1.row(0) - m2.row(0);
-  m3.row(1) = m1.row(1) - m2.row(1);
-
-  for (auto iter = cbegin(m3), iend = cend(m3); iter != iend; ++iter)
-    EXPECT_FLOAT_EQ(*iter, -1.0d);
 }
 
 TEST(test_matrix_view_ops, column_subtraction)
@@ -246,35 +244,13 @@ TEST(test_matrix_view_ops, column_subtraction)
   MatrixType m2 = ones<MatrixType>(2);
   MatrixType m3(2);
 
-  m3.column(0) = m1.column(0) - m2.column(0);
-  m3.column(1) = m1.column(1) - m2.column(1);
+  m3.col(0) = m1.col(0) - m2.col(0);
+  m3.col(1) = m1.col(1) - m2.col(1);
 
   for (auto iter = cbegin(m3), iend = cend(m3); iter != iend; ++iter)
     EXPECT_FLOAT_EQ(*iter, -1.0d);
 }
-
-TEST(test_matrix_view_ops, row_column_multiplication)
-{
-  MatrixType m1 = ones<MatrixType>(2);
-  MatrixType m2 = m1.row(0) * m1.col(0);
-  
-  EXPECT_EQ(m2.rows(), 1);
-  EXPECT_EQ(m2.cols(), 1);
-  EXPECT_FLOAT_EQ(m2(0,0), 2.0d);
-}
-
-TEST(test_matrix_view_ops, column_row_multiplication)
-{
-  MatrixType m1 = ones<MatrixType>(2);
-  MatrixType m2 = m1.col(0) * m1.row(0);
-  
-  EXPECT_EQ(m2.rows(), 2);
-  EXPECT_EQ(m2.cols(), 2);
-    
-  for (auto iter = cbegin(m2), iend = cend(m2); iter != iend; ++iter)
-    EXPECT_FLOAT_EQ(*iter, 1.0d);
-}
-
+*/
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

@@ -173,10 +173,9 @@ namespace numerical {
     {
       SerialMatrixImplementation<T, _Alloc> result{*this};
 
-      for (auto iter = begin(result), iend = end(result), iter2 = cbegin(*this);
-           iter != iend; ++iter, ++iter2)
-        *iter = -(*iter2);
-
+      std::transform(cbegin(*this), cend(*this), begin(result), 
+                     [](const T& x) {return -x;});
+      
       return result;
     }
 
@@ -188,9 +187,8 @@ namespace numerical {
       assert(rhs.rows() == rows());
       assert(rhs.cols() == cols());
 
-      for (auto iter = begin(*this), iend = end(*this), iter2 = cbegin(rhs);
-           iter != iend; ++iter, ++iter2)
-        *iter += *iter2;
+      std::transform(cbegin(*this), cend(*this), cbegin(rhs), begin(*this),
+                     [](const T& x, const T& y) {return x + y;});
 
       return *this;
     }
@@ -203,9 +201,8 @@ namespace numerical {
       assert(rhs.rows() == rows());
       assert(rhs.cols() == cols());
 
-      for (auto iter = begin(*this), iend = end(*this), iter2 = cbegin(rhs);
-           iter != iend; ++iter, ++iter2)
-        *iter -= *iter2;
+      std::transform(cbegin(*this), cend(*this), cbegin(rhs), begin(*this),
+                     [](const T& x, const T& y) {return x - y;});
 
       return *this;
     }
@@ -238,9 +235,8 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator+=(const T& scalar)
     {
-      for (auto iter = begin(*this), iend = end(*this);
-           iter != iend; ++iter)
-        *iter += scalar;
+      std::transform(cbegin(*this), cend(*this), begin(*this),
+                     [&scalar](const int x) {return x + scalar;} );
 
       return *this;
     }
@@ -249,9 +245,8 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator-=(const T& scalar)
     {
-      for (auto iter = begin(*this), iend = end(*this);
-           iter != iend; ++iter)
-        *iter -= scalar;
+      std::transform(cbegin(*this), cend(*this), begin(*this),
+                     [&scalar](const int x) {return x - scalar;} );
 
       return *this;
     }
@@ -260,9 +255,8 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator*=(const T& scalar)
     {
-      for (auto iter = begin(*this), iend = end(*this);
-           iter != iend; ++iter)
-        *iter *= scalar;
+      std::transform(cbegin(*this), cend(*this), begin(*this),
+                     [&scalar](const int x) {return x * scalar;} );
 
       return *this;
     }
@@ -271,9 +265,9 @@ namespace numerical {
     SerialMatrixImplementation<T, _Alloc>&
     SerialMatrixImplementation<T, _Alloc>::operator/=(const T& scalar)
     {
-      for (auto iter = begin(*this), iend = end(*this);
-           iter != iend; ++iter)
-        *iter /= scalar;
+      assert(scalar != 0);
+      std::transform(cbegin(*this), cend(*this), begin(*this),
+                     [&scalar](const int x) {return x / scalar;} );
 
       return *this;
     }
@@ -285,7 +279,7 @@ namespace numerical {
     {
       SerialMatrixImplementation<T, _Alloc> result(lhs);
 
-      return result += rhs;
+      return std::move(result += rhs);
     }
 
     template <class T, class _Alloc>
