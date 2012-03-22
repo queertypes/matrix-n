@@ -22,6 +22,7 @@ VERSION = '0.9'
 AMD_OPENCL_PATH = '/opt/AMDAPP/include'
 NEEDED_TR1_LIBS = frozenset(['random', 'numeric',
                              'chrono', 'functional'])
+FAST_TEST_FLAGS = '-Wall -Wextra -march=native -O3 -std=c++0x'
 TEST_FLAGS = '-Wall -Wextra -gdwarf-4 -fvar-tracking-assignments -O0 -fno-inline -std=c++0x'
 CXX_FLAGS = '-Wall -Wextra -pedantic -ansi -O2 -std=c++0x -g'
 
@@ -97,7 +98,7 @@ def build(bld):
       libs += ['gsl', 'gslcblas']
 
     bld.program(source=path_join('tests', test),
-                cxxflags=TEST_FLAGS,
+                cxxflags=FAST_TEST_FLAGS,
                 includes='include',
                 libpath='../lib',
                 lib=libs,

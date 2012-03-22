@@ -15,8 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NUMERICAL_DETAIL_MATRIX_VIEW_HPP
-#define NUMERICAL_DETAIL_MATRIX_VIEW_HPP
+#ifndef MATRIX_N_NUMERICAL_DETAIL_MATRIX_VIEW_HPP
+#define MATRIX_N_NUMERICAL_DETAIL_MATRIX_VIEW_HPP
 #include <iterator>
 #include <cstddef>
 
@@ -214,6 +214,6 @@ namespace numerical {
   }
 }
 
-#include <implementation/detail/matrix_view.cpp>
+#include <matrix_n/implementation/detail/matrix_view.cpp>
 
 #endif

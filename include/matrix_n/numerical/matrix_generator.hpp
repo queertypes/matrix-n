@@ -15,8 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NUMERICAL_MATRIX_GENERATOR_HPP
-#define NUMERICAL_MATRIX_GENERATOR_HPP
+#ifndef MATRIX_N_NUMERICAL_MATRIX_GENERATOR_HPP
+#define MATRIX_N_NUMERICAL_MATRIX_GENERATOR_HPP
 
 #include <random>
 
@@ -90,6 +90,6 @@ namespace numerical {
   Matrix unit(const size_t cols, const size_t index);
 }
 
-#include <implementation/matrix_generator.cpp>
+#include <matrix_n/implementation/matrix_generator.cpp>
 
 #endif

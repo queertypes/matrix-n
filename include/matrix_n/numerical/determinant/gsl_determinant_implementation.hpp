@@ -15,21 +15,22 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NUMERICAL_INVERSE_GSL_INVERSE_IMPLEMENTATION_HPP
-#define NUMERICAL_INVERSE_GSL_INVERSE_IMPLEMENTATION_HPP
+#ifndef MATRIX_N_NUMERICAL_DETERMINANT_GSL_DETERMINANT_IMPLEMENTATION_HPP
+#define MATRIX_N_NUMERICAL_DETERMINANT_GSL_DETERMINANT_IMPLEMENTATION_HPP
 
 namespace numerical {
   namespace impl {
 
     template <class Matrix>
-    struct GslInverseImplementation {
+    struct GslDeterminantImplementation {
       typedef Matrix matrix_type;
+      typedef typename matrix_type::value_type value_type;
 
-      matrix_type operator()(const matrix_type&);
+      value_type operator()(const matrix_type&);
     };
   }
 }
 
-#include <implementation/inverse/gsl_inverse_implementation.cpp>
+#include <matrix_n/implementation/determinant/gsl_determinant_implementation.cpp>
 
 #endif

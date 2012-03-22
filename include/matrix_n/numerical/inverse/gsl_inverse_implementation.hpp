@@ -15,30 +15,21 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NUMERICAL_INVERSE_HPP
-#define NUMERICAL_INVERSE_HPP
+#ifndef MATRIX_N_NUMERICAL_INVERSE_GSL_INVERSE_IMPLEMENTATION_HPP
+#define MATRIX_N_NUMERICAL_INVERSE_GSL_INVERSE_IMPLEMENTATION_HPP
 
 namespace numerical {
-  template <class Matrix,
-            class InverseImplementationType>
-  class Inverse {
-  public:
-    Inverse() = default;
-    ~Inverse() = default;
-    Inverse(const Inverse&) = delete;
-    Inverse(Inverse&&) = delete;
-    Inverse& operator=(Inverse) = delete;
+  namespace impl {
 
-    typedef Matrix matrix_type;
-    typedef InverseImplementationType inverse_implementation_type;
+    template <class Matrix>
+    struct GslInverseImplementation {
+      typedef Matrix matrix_type;
 
-    matrix_type operator()(const matrix_type&);
-
-  private:
-    inverse_implementation_type _impl;
-  };
+      matrix_type operator()(const matrix_type&);
+    };
+  }
 }
 
-#include <implementation/inverse.cpp>
+#include <matrix_n/implementation/inverse/gsl_inverse_implementation.cpp>
 
 #endif

@@ -16,11 +16,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
-#include <numerical/matrix.hpp>
-#include <numerical/matrix_generator.hpp>
-#include <numerical/matrix/serial_matrix_implementation.hpp>
-#include <numerical/determinant.hpp>
-#include <numerical/determinant/gsl_determinant_implementation.hpp>
+#include <matrix_n/numerical/matrix.hpp>
+#include <matrix_n/numerical/matrix_generator.hpp>
+#include <matrix_n/numerical/matrix/serial_matrix_implementation.hpp>
+#include <matrix_n/numerical/determinant.hpp>
+#include <matrix_n/numerical/determinant/gsl_determinant_implementation.hpp>
 
 using numerical::Matrix;
 using numerical::impl::SerialMatrixImplementation;

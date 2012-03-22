@@ -16,9 +16,9 @@
 */
 #include <cstdio>
 #include <iostream>
-#include <numerical/matrix.hpp>
-#include <numerical/matrix_generator.hpp>
-#include <numerical/matrix/serial_matrix_implementation.hpp>
+#include <matrix_n/numerical/matrix.hpp>
+#include <matrix_n/numerical/matrix_generator.hpp>
+#include <matrix_n/numerical/matrix/serial_matrix_implementation.hpp>
 using namespace std;
 using namespace numerical;
 using impl::SerialMatrixImplementation;

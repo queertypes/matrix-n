@@ -15,8 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
-#define NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
+#ifndef MATRIX_N_NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
+#define MATRIX_N_NUMERICAL_MATRIX_SERIAL_MATRIX_IMPLEMENTATION_HPP
 
 #include <memory>
 
@@ -190,6 +190,6 @@ namespace numerical {
   }
 }
 
-#include <implementation/matrix/serial_matrix_implementation.cpp>
+#include <matrix_n/implementation/matrix/serial_matrix_implementation.cpp>
 
 #endif

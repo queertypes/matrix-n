@@ -15,10 +15,10 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef NUMERICAL_MATRIX_HPP
-#define NUMERICAL_MATRIX_HPP
+#ifndef MATRIX_N_NUMERICAL_MATRIX_HPP
+#define MATRIX_N_NUMERICAL_MATRIX_HPP
 
-#include <numerical/detail/matrix_view.hpp>
+#include <matrix_n/numerical/detail/matrix_view.hpp>
 
 namespace numerical {
 
@@ -186,6 +186,6 @@ namespace numerical {
             const Matrix<T, _Impl, _Alloc>&);
 }
 
-#include <implementation/matrix.cpp>
+#include <matrix_n/implementation/matrix.cpp>
 
 #endif

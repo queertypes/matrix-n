@@ -15,31 +15,30 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NUMERICAL_DETERMINANT_HPP
-#define NUMERICAL_DETERMINANT_HPP
+#ifndef MATRIX_N_NUMERICAL_INVERSE_HPP
+#define MATRIX_N_NUMERICAL_INVERSE_HPP
 
 namespace numerical {
   template <class Matrix,
-            class DeterminantImpl>
-  class Determinant {
+            class InverseImplementationType>
+  class Inverse {
   public:
-    Determinant() = default;
-    ~Determinant() = default;
-    Determinant(const Determinant&) = delete;
-    Determinant(Determinant&&) = delete;
-    Determinant& operator=(Determinant) = delete;
+    Inverse() = default;
+    ~Inverse() = default;
+    Inverse(const Inverse&) = delete;
+    Inverse(Inverse&&) = delete;
+    Inverse& operator=(Inverse) = delete;
 
     typedef Matrix matrix_type;
-    typedef typename matrix_type::value_type value_type;
-    typedef DeterminantImpl determinant_implementation_type;
+    typedef InverseImplementationType inverse_implementation_type;
 
-    value_type operator()(const matrix_type&);
+    matrix_type operator()(const matrix_type&);
 
   private:
-    determinant_implementation_type _impl;
+    inverse_implementation_type _impl;
   };
 }
 
-#include <implementation/determinant.cpp>
+#include <matrix_n/implementation/inverse.cpp>
 
 #endif
