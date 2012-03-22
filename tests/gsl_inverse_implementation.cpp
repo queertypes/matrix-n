@@ -81,6 +81,7 @@ TEST(InverseTest, HandMadeMatrix)
 
 TEST(InverseTest, BadInverse)
 {
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
   auto m = zeros<MatrixType>(2);
 
   ASSERT_DEATH(inv(m), ".*GSL error.*");

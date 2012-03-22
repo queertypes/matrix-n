@@ -83,6 +83,33 @@ namespace numerical {
     }
 
     template <class T, class _Alloc>
+    template <class InputIterator>
+    SerialMatrixImplementation<T,
+      _Alloc>::SerialMatrixImplementation(const InputIterator _begin,
+                                          const InputIterator _end,
+                                          const size_t n)
+      : _allocator(),
+        _rows(n), _cols(n),
+        _data(_allocator.allocate(n * n))
+    {
+      std::copy(_begin, _end, begin(*this));
+    }
+
+    template <class T, class _Alloc>
+    template <class InputIterator>
+    SerialMatrixImplementation<T,
+      _Alloc>::SerialMatrixImplementation(const InputIterator _begin,
+                                          const InputIterator _end,
+                                          const size_t rows,
+                                          const size_t cols)
+      : _allocator(),
+        _rows(rows), _cols(cols),
+        _data(_allocator.allocate(rows * cols))
+    {
+      std::copy(_begin, _end, begin(*this));
+    }
+
+    template <class T, class _Alloc>
     SerialMatrixImplementation<T,
       _Alloc>::SerialMatrixImplementation(SerialMatrixImplementation<T,
         _Alloc>&& other)
@@ -91,12 +118,6 @@ namespace numerical {
           _data(nullptr)
     {
       swap(*this, other);
-    }
-
-    template <class T, class _Alloc>
-    SerialMatrixImplementation<T, _Alloc>::~SerialMatrixImplementation<T,
-      _Alloc>()
-    {
     }
 
     template <class T, class _Alloc>
@@ -174,9 +195,9 @@ namespace numerical {
     {
       SerialMatrixImplementation<T, _Alloc> result{*this};
 
-      std::transform(cbegin(*this), cend(*this), begin(result), 
+      std::transform(cbegin(*this), cend(*this), begin(result),
                      [](const T& x) {return -x;});
-      
+
       return result;
     }
 

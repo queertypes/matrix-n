@@ -26,7 +26,7 @@ using numerical::ones;
 using numerical::eye;
 using numerical::random;
 
-static const size_t N = 256;
+static const size_t N = 64;
 
 typedef Matrix<double,
                SerialMatrixImplementation> MatrixType;
@@ -47,8 +47,8 @@ TEST(test_matrix_constructors, default_constructor_rectangle)
 
 TEST(test_matrix_constructors, copy_constructor)
 {
-  MatrixType a{N};
-  MatrixType b{a};
+  MatrixType a(N);
+  MatrixType b(a);
 
   EXPECT_EQ(a.rows(), b.rows());
   EXPECT_EQ(a.cols(), b.cols());
@@ -68,6 +68,31 @@ TEST(test_matrix_constructors, move_constructor)
   EXPECT_EQ(a.cols(), 0ul);
   EXPECT_EQ(b.rows(), N);
   EXPECT_EQ(b.cols(), N);
+}
+
+TEST(test_matrix_constructors, range_constructor_square)
+{
+  typename MatrixType::value_type d[9] = {1,2,3,
+                                          4,5,6,
+                                          7,8,9};
+  MatrixType m(d, d+9, 3);
+  
+  typename MatrixType::value_type i = 1;
+  for (const auto x : m)
+    EXPECT_EQ(x, i++);
+}
+
+TEST(test_matrix_constructors, range_constructor_rectangle)
+{
+  typename MatrixType::value_type d[9] = {1,2,3,
+                                          4,5,6,
+                                          7,8,9};
+
+  MatrixType m(d, d+9, 3, 3);
+  
+  typename MatrixType::value_type i = 1;
+  for (const auto x : m)
+    EXPECT_EQ(x, i++);
 }
 
 TEST(test_matrix_aux, global_begin)

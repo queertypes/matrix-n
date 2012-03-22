@@ -23,7 +23,7 @@ AMD_OPENCL_PATH = '/opt/AMDAPP/include'
 NEEDED_TR1_LIBS = frozenset(['random', 'numeric',
                              'chrono', 'functional'])
 TEST_FLAGS = '-Wall -Wextra -gdwarf-4 -fvar-tracking-assignments -O0 -fno-inline -std=c++0x'
-CXX_FLAGS = '-Wall -Wextra -pedantic -ansi -O2 -std=c++0x -g')
+CXX_FLAGS = '-Wall -Wextra -pedantic -ansi -O2 -std=c++0x -g'
 
 def contains(haystack, needle):
   return haystack.count(needle) > 0
@@ -95,7 +95,6 @@ def build(bld):
 
     if contains(test, 'gsl'):
       libs += ['gsl', 'gslcblas']
-    print libs
 
     bld.program(source=path_join('tests', test),
                 cxxflags=TEST_FLAGS,

@@ -36,7 +36,7 @@ namespace numerical {
     typedef detail::ColumnView<T> column_view_type;
 
   public:
-    Matrix();
+    Matrix() =  default;
     explicit Matrix(const size_t n);
     Matrix(const size_t rows, const size_t cols);
 
@@ -50,15 +50,9 @@ namespace numerical {
            const InputIterator end,
            const size_t rows, const size_t cols);
 
-    Matrix(const std::initializer_list<T>&,
-           const size_t n);
-
-    Matrix(const std::initializer_list<T>&,
-           const size_t rows, const size_t cols);
-
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
-    ~Matrix();
+    ~Matrix() = default;
 
     template <class _T, template <class, class> class _Impl, class _Alloc>
     void friend swap(Matrix<_T, _Impl, _Alloc>&,

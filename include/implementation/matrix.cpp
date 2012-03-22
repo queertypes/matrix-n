@@ -20,14 +20,6 @@ namespace numerical {
   template <class T,
             template <class,class> class _Impl,
             class _Alloc>
-  Matrix<T, _Impl, _Alloc>::Matrix()
-    : _impl()
-  {
-  }
-
-  template <class T,
-            template <class,class> class _Impl,
-            class _Alloc>
   Matrix<T, _Impl, _Alloc>::Matrix(const size_t n)
     : _impl(n)
   {
@@ -49,6 +41,26 @@ namespace numerical {
     : _impl(other._impl)
   {
   }
+
+  template <class T,
+            template <class,class> class _Impl,
+            class _Alloc>
+  template <class _II>
+  Matrix<T, _Impl, _Alloc>::Matrix(const _II begin,
+                                   const _II end,
+                                   const size_t n)
+    : _impl(begin, end, n)
+  {}
+
+  template <class T,
+            template <class,class> class _Impl,
+            class _Alloc>
+  template <class _II>
+  Matrix<T, _Impl, _Alloc>::Matrix(const _II begin,
+                                   const _II end,
+                                   const size_t rows, const size_t cols)
+    : _impl(begin, end, rows, cols)
+  {}
 
   template <class T,
             template <class,class> class _Impl,
@@ -75,13 +87,6 @@ namespace numerical {
   {
     swap(*this, other);
     return *this;
-  }
-
-  template <class T,
-            template <class,class> class _Impl,
-            class _Alloc>
-  Matrix<T, _Impl, _Alloc>::~Matrix()
-  {
   }
 
   template <class T,

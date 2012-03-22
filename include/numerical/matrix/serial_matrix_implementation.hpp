@@ -48,7 +48,17 @@ namespace numerical {
       SerialMatrixImplementation&
       operator=(SerialMatrixImplementation);
 
-      ~SerialMatrixImplementation();
+      template <class InputIterator>
+      SerialMatrixImplementation(const InputIterator begin,
+                                 const InputIterator end,
+                                 const size_t n);
+
+      template <class InputIterator>
+      SerialMatrixImplementation(const InputIterator begin,
+                                 const InputIterator end,
+                                 const size_t rows, const size_t cols);
+
+      ~SerialMatrixImplementation() = default;
 
       T& operator()(const size_t row, const size_t col);
       T& operator()(const size_t row, const size_t col) const;
