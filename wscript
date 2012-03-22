@@ -1,12 +1,29 @@
+#  Matrix N - generic matrix library offering compile-time implementation choices
+#  Copyright (C) 2012 Alejandro Cabrera
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from os.path import join as path_join
 from os.path import basename as basename
 from os import listdir as os_listdir
-APPNAME = 'fast-slater-determinant'
-VERSION = '0.1'
+APPNAME = 'Matrix N'
+VERSION = '0.9'
 
 AMD_OPENCL_PATH = '/opt/AMDAPP/include'
 NEEDED_TR1_LIBS = frozenset(['random', 'numeric',
                              'chrono', 'functional'])
+TEST_FLAGS = '-Wall -Wextra -gdwarf-4 -fvar-tracking-assignments -O0 -fno-inline -std=c++0x'
+CXX_FLAGS = '-Wall -Wextra -pedantic -ansi -O2 -std=c++0x -g')
 
 def contains(haystack, needle):
   return haystack.count(needle) > 0
@@ -71,16 +88,17 @@ def build(bld):
   bld.program(source='src/fast-slater.cpp',
               includes='include',
               target='fast-slater',
-              cxxflags='-Wall -Wextra -pedantic -ansi -O2 -std=c++0x -g')
+              cxxflags=CXX_FLAGS)
 
   for test in os_listdir('tests'):
     libs = ['gtest']
 
     if contains(test, 'gsl'):
       libs += ['gsl', 'gslcblas']
+    print libs
 
     bld.program(source=path_join('tests', test),
-                cxxflags='-Wall -Wextra -gdwarf-4 -fvar-tracking-assignments -O0 -fno-inline -std=c++0x',
+                cxxflags=TEST_FLAGS,
                 includes='include',
                 libpath='../lib',
                 lib=libs,
