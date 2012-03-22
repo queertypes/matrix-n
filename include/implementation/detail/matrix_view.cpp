@@ -142,10 +142,177 @@ namespace numerical {
     }
 
     template <class T>
-    ColumnView<T>::ColumnView(const T *const begin,
+    ColumnIterator<T>::ColumnIterator(T* begin,
+                                      const size_t rows, const size_t cols)
+      : _cols(cols), _rows(rows), _data(begin)
+    {}
+
+    template <class T>
+    ColumnIterator<T>&
+    ColumnIterator<T>::operator++()
+    {
+      _data += _cols;
+      return *this;
+    }
+
+    template <class T>
+    ColumnIterator<T>
+    ColumnIterator<T>::operator++(int)
+    {
+      ColumnIterator<T> tmp(*this);
+      _data += _cols;
+      return tmp;
+    }
+
+    template <class T>
+    ColumnIterator<T>&
+    ColumnIterator<T>::operator--()
+    {
+      _data -= _cols;
+      return *this;
+    }
+
+    template <class T>
+    ColumnIterator<T>
+    ColumnIterator<T>::operator--(int)
+    {
+      ColumnIterator<T> tmp(*this);
+      _data -= _cols;
+      return tmp;
+    }
+
+    template <class T>
+    ColumnIterator<T>&
+    ColumnIterator<T>::operator+=(const ptrdiff_t offset)
+    {
+      _data += (offset * _cols);
+      return *this;
+    }
+
+    template <class T>
+    ColumnIterator<T>&
+    ColumnIterator<T>::operator-=(const ptrdiff_t offset)
+    {
+      _data -= (offset * _cols);
+      return *this;
+    }
+
+    template <class T>
+    T& ColumnIterator<T>::operator[](const ptrdiff_t offset)
+    {
+      return *(_data + offset * _cols);
+    }
+
+    template <class T>
+    const T& ColumnIterator<T>::operator[](const ptrdiff_t offset) const
+    {
+      return *(_data + offset * _cols);
+    }
+
+    template <class T>
+    T& ColumnIterator<T>::operator*() const
+    {
+      return *_data;
+    }
+
+    template <class T>
+    T* ColumnIterator<T>::operator->() const
+    {
+      return _data;
+    }
+
+    template <class T>
+    ColumnIterator<T> operator+(const ColumnIterator<T>& lhs,
+                                const ptrdiff_t offset)
+    {
+      ColumnIterator<T> result(lhs);
+      return result += offset;
+    }
+
+    template <class T>
+    ColumnIterator<T> operator-(const ColumnIterator<T>& lhs,
+                                const ptrdiff_t offset)
+    {
+      ColumnIterator<T> result(lhs);
+      return result -= offset;
+    }
+
+    template <class T>
+    ColumnIterator<T> operator+(const ptrdiff_t offset,
+                                const ColumnIterator<T>& lhs)
+    {
+      return lhs + offset;
+    }
+
+    template <class T>
+    ColumnIterator<T> operator-(const ptrdiff_t offset,
+                                const ColumnIterator<T>& lhs)
+    {
+      return lhs - offset;
+    }
+
+    template <class T>
+    ptrdiff_t operator-(const ColumnIterator<T>& lhs,
+                        const ColumnIterator<T>& rhs)
+    {
+      return lhs._data - rhs._data;
+    }
+
+    template <class T>
+    bool operator==(const ColumnIterator<T>& lhs,
+                    const ColumnIterator<T>& rhs)
+    {
+      return (lhs._data == rhs._data);
+    }
+
+    template <class T>
+    bool operator!=(const ColumnIterator<T>& lhs,
+                    const ColumnIterator<T>& rhs)
+    {
+      return !(lhs == rhs);
+    }
+
+    template <class T>
+    bool operator<(const ColumnIterator<T>& lhs,
+                   const ColumnIterator<T>& rhs)
+    {
+      return (lhs._data < rhs._data);
+    }
+
+    template <class T>
+    bool operator>(const ColumnIterator<T>& lhs,
+                   const ColumnIterator<T>& rhs)
+    {
+      return !(lhs == rhs || lhs < rhs);
+    }
+
+    template <class T>
+    bool operator<=(const ColumnIterator<T>& lhs,
+                    const ColumnIterator<T>& rhs)
+    {
+      return (lhs == rhs || lhs < rhs);
+    }
+
+    template <class T>
+    bool operator>=(const ColumnIterator<T>& lhs,
+                    const ColumnIterator<T>& rhs)
+    {
+      return (lhs == rhs || lhs > rhs);
+    }
+
+    template <class T>
+    ColumnView<T>::ColumnView(T* begin,
                               const size_t rows, const size_t cols)
       : _data(begin, rows, cols)
     {}
+
+    template <class T>
+    ColumnView<T>&
+    ColumnView<T>::operator=(const ColumnView<T>& other)
+    {
+      std::copy(cbegin(other), cend(other), begin(*this));
+      return *this;
+    }
 
     template <class T>
     ColumnView<T>&
@@ -169,7 +336,6 @@ namespace numerical {
     typename ColumnView<T>::value_type
     ColumnView<T>::operator()(const size_t index)
     {
-      //assert(index < _rows);
       return *(_data + index);
     }
 
@@ -181,56 +347,52 @@ namespace numerical {
     }
 
     template <class T>
-    ColumnView<T>::ColumnIterator::ColumnIterator(const T * begin,
-                                                  const size_t rows,
-                                                  const size_t cols)
-      : _cols(cols), _rows(rows), _data(begin)
-    {}
-
-    template <class T>
-    typename ColumnView<T>::ColumnIterator&
-    ColumnView<T>::ColumnIterator::operator++()
-    {
-      return _data += _cols;
-    }
-
-    template <class T>
-    typename ColumnView<T>::ColumnIterator
-    ColumnView<T>::ColumnIterator::operator++(int)
-    {
-      ColumnView<T>::ColumnIterator tmp(*this);
-      ++(*this);
-      return tmp;
-    }
-
-    template <class T>
-    typename ColumnView<T>::ColumnIterator&
-    ColumnView<T>::ColumnIterator::operator--()
-    {
-      return _data -= _cols;
-    }
-
-    template <class T>
-    typename ColumnView<T>::ColumnIterator
-    ColumnView<T>::ColumnIterator::operator--(int)
-    {
-      ColumnView<T>::ColumnIterator tmp(*this);
-      --(*this);
-      return tmp;
-    }
-
-    template <class T>
-    typename ColumnView<T>::ColumnIterator::reference
-    ColumnView<T>::ColumnIterator::operator*() const
-    {
-      return *_data;
-    }
-
-    template <class T>
-    typename ColumnView<T>::ColumnIterator::pointer
-    ColumnView<T>::ColumnIterator::operator->() const
+    typename ColumnView<T>::iterator
+    ColumnView<T>::data() const
     {
       return _data;
+    }
+
+    template <class T>
+    size_t
+    ColumnView<T>::cols() const
+    {
+      return data()._cols;
+    }
+
+    template <class T>
+    size_t
+    ColumnView<T>::rows() const
+    {
+      return data()._rows;
+    }
+
+    template <class T>
+    typename ColumnView<T>::iterator
+    begin(const ColumnView<T>& v)
+    {
+      return v.data();
+    }
+
+    template <class T>
+    typename ColumnView<T>::const_iterator
+    cbegin(const ColumnView<T>& v)
+    {
+      return begin(v);
+    }
+
+    template <class T>
+    typename ColumnView<T>::iterator
+    end(const ColumnView<T>& v)
+    {
+      return v.data() + v.cols();
+    }
+
+    template <class T>
+    typename ColumnView<T>::const_iterator
+    cend(const ColumnView<T>& v)
+    {
+      return end(v);
     }
 
     template <class T>
@@ -238,7 +400,6 @@ namespace numerical {
     operator+(const ColumnView<T>& lhs, const ColumnView<T>& rhs)
     {
       ColumnView<T> result{lhs};
-
       return result += rhs;
     }
 
@@ -247,7 +408,6 @@ namespace numerical {
     operator-(const ColumnView<T>& lhs, const ColumnView<T>& rhs)
     {
       ColumnView<T> result{lhs};
-
       return result -= rhs;
     }
   }

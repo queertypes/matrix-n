@@ -37,7 +37,7 @@ namespace numerical {
       RowView(const RowView&) = default;
       RowView(RowView&&) =  default;
 
-      RowView(iterator begin, const size_t cols);
+      RowView(pointer begin, const size_t cols);
 
       RowView& operator=(RowView);
       RowView& operator+=(const RowView&);
@@ -81,9 +81,10 @@ namespace numerical {
       typedef T value_type;
       typedef T* pointer;
       typedef T& reference;
+      typedef const T& const_reference;
 
       typedef std::random_access_iterator_tag iterator_category;
-      typedef ptdiff_t difference_type;
+      typedef ptrdiff_t difference_type;
       typedef size_t size_type;
 
       ColumnIterator() = default;
@@ -93,7 +94,7 @@ namespace numerical {
       ColumnIterator(ColumnIterator&&) = default;
       ColumnIterator& operator=(const ColumnIterator&) = default;
 
-      ColumnIterator(const T *const begin,
+      ColumnIterator(T *begin,
                      const size_t rows, const size_t cols);
 
       ColumnIterator& operator++();
@@ -110,7 +111,6 @@ namespace numerical {
       reference operator*() const;
       pointer operator->() const;
 
-    private:
       size_t _cols, _rows;
       pointer _data;
     };
@@ -124,27 +124,39 @@ namespace numerical {
                                 const ptrdiff_t offset);
 
     template <class T>
-    bool operator==(const ColumnIterator<T>& lhs, 
+    ColumnIterator<T> operator+(const ptrdiff_t offset,
+                                const ColumnIterator<T>& lhs);
+
+    template <class T>
+    ColumnIterator<T> operator-(const ptrdiff_t offset,
+                                const ColumnIterator<T>& lhs);
+
+    template <class T>
+    ptrdiff_t operator-(const ColumnIterator<T>& lhs,
+                        const ColumnIterator<T>& rhs);
+
+    template <class T>
+    bool operator==(const ColumnIterator<T>& lhs,
                     const ColumnIterator<T>& rhs);
 
     template <class T>
-    bool operator!=(const ColumnIterator<T>& lhs, 
+    bool operator!=(const ColumnIterator<T>& lhs,
                     const ColumnIterator<T>& rhs);
 
     template <class T>
-    bool operator<(const ColumnIterator<T>& lhs, 
+    bool operator<(const ColumnIterator<T>& lhs,
                    const ColumnIterator<T>& rhs);
 
     template <class T>
-    bool operator>(const ColumnIterator<T>& lhs, 
+    bool operator>(const ColumnIterator<T>& lhs,
                    const ColumnIterator<T>& rhs);
 
     template <class T>
-    bool operator<=(const ColumnIterator<T>& lhs, 
+    bool operator<=(const ColumnIterator<T>& lhs,
                     const ColumnIterator<T>& rhs);
 
     template <class T>
-    bool operator>=(const ColumnIterator<T>& lhs, 
+    bool operator>=(const ColumnIterator<T>& lhs,
                     const ColumnIterator<T>& rhs);
 
     template <class T>
@@ -152,25 +164,27 @@ namespace numerical {
     public:
       typedef T value_type;
 
-      struct ColumnIterator;
-
-      typedef ColumnIterator iterator;
-      typedef const ColumnIterator const_iterator;
+      typedef ColumnIterator<T> iterator;
+      typedef const ColumnIterator<T> const_iterator;
 
       ColumnView() = default;
       ColumnView(const ColumnView&) = default;
       ColumnView(ColumnView&&) = default;
       ~ColumnView() = default;
-      ColumnView& operator=(const ColumnView&) = default;
 
-      ColumnView(const T *const begin,
+      ColumnView(T* begin,
                  const size_t rows, const size_t cols);
+      ColumnView& operator=(const ColumnView&);
 
       ColumnView& operator+=(const ColumnView&);
       ColumnView& operator-=(const ColumnView&);
 
       T operator()(const size_t index);
       const T operator()(const size_t index) const;
+
+      iterator data() const;
+      size_t cols() const;
+      size_t rows() const;
 
     private:
       iterator _data;
