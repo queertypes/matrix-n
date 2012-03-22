@@ -74,15 +74,6 @@ TEST(test_matrix_view_assignment, row_assignment)
                 [](const double x) {EXPECT_FLOAT_EQ(x, 1.0d); });
 }
 
-TEST(test_matrix_view_assignment, row_assignment_dim_mismatch)
-{
-  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
-  MatrixType m1 = zeros<MatrixType>(2);
-  MatrixType m2 = ones<MatrixType>(3);
-
-  EXPECT_DEATH(m1.row(0) = m2.row(1), "");
-}
-
 TEST(test_matrix_view_assignment, row_add_assignment)
 {
   MatrixType m1 = ones<MatrixType>(2);
@@ -258,6 +249,51 @@ TEST(test_matrix_view_ops, column_subtraction)
 
   for (auto iter = cbegin(m3), iend = cend(m3); iter != iend; ++iter)
     EXPECT_FLOAT_EQ(*iter, -1.0d);
+}
+
+TEST(test_matrix_assertions, row_assign_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2);
+  MatrixType m2(3);
+
+  EXPECT_DEATH(m1.row(0) = m2.row(0), "");
+}
+
+TEST(test_matrix_assertions, row_add_assign_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2);
+  MatrixType m2(3);
+
+  EXPECT_DEATH(m1.row(0) += m2.row(0), "");
+}
+
+TEST(test_matrix_assertions, col_assign_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2);
+  MatrixType m2(3);
+
+  EXPECT_DEATH(m1.col(0) = m2.col(0), "");
+}
+
+TEST(test_matrix_assertions, col_add_assign_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2);
+  MatrixType m2(3);
+
+  EXPECT_DEATH(m1.col(0) += m2.col(0), "");
+}
+
+TEST(test_matrix_assertions, col_subtract_assign_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2);
+  MatrixType m2(3);
+
+  EXPECT_DEATH(m1.col(0) -= m2.col(0), "");
 }
 
 int main(int argc, char **argv)
