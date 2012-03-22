@@ -172,7 +172,6 @@ TEST(test_matrix_view_assignment, column_assignment)
   MatrixType m1 = zeros<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);
 
-  //#include <iostream>
   m1.col(0) = m2.col(1);
 
   // column assignment works
@@ -189,7 +188,7 @@ TEST(test_matrix_view_assignment, column_assignment)
   EXPECT_FLOAT_EQ(m2(1,0), 1.0d);
   EXPECT_FLOAT_EQ(m2(1,1), 1.0d);
 }
-/*
+
 TEST(test_matrix_view_assignment, column_add_assignment)
 {
   MatrixType m1 = ones<MatrixType>(2);
@@ -217,7 +216,7 @@ TEST(test_matrix_view_assignment, column_subtract_assignment)
   MatrixType m1 = zeros<MatrixType>(2);
   MatrixType m2 = ones<MatrixType>(2);;
 
-  m1.col(0) += m2.col(1);
+  m1.col(0) -= m2.col(1);
 
   // column subtract assignment works
   EXPECT_FLOAT_EQ(m1(0,0), -1.0d);
@@ -259,7 +258,7 @@ TEST(test_matrix_view_ops, column_subtraction)
   for (auto iter = cbegin(m3), iend = cend(m3); iter != iend; ++iter)
     EXPECT_FLOAT_EQ(*iter, -1.0d);
 }
-*/
+
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

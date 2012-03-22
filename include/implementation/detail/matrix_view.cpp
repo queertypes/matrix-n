@@ -255,7 +255,8 @@ namespace numerical {
     ptrdiff_t operator-(const ColumnIterator<T>& lhs,
                         const ColumnIterator<T>& rhs)
     {
-      return lhs._data - rhs._data;
+      assert(lhs._rows == rhs._rows);
+      return (lhs._data - rhs._data)/lhs._rows;
     }
 
     template <class T>
@@ -310,6 +311,7 @@ namespace numerical {
     ColumnView<T>&
     ColumnView<T>::operator=(const ColumnView<T>& other)
     {
+      assert(this->data()._rows == other.data()._rows);
       std::copy(cbegin(other), cend(other), begin(*this));
       return *this;
     }
@@ -318,6 +320,7 @@ namespace numerical {
     ColumnView<T>&
     ColumnView<T>::operator+=(const ColumnView& rhs)
     {
+      assert(this->data()._rows == rhs.data()._rows);
       std::transform(cbegin(*this), cend(*this), cbegin(rhs), begin(*this),
                      [](const T& x, const T& y) {return x + y;});
       return *this;
@@ -327,6 +330,7 @@ namespace numerical {
     ColumnView<T>&
     ColumnView<T>::operator-=(const ColumnView& rhs)
     {
+      assert(this->data()._rows == rhs.data()._rows);
       std::transform(cbegin(*this), cend(*this), cbegin(rhs), begin(*this),
                      [](const T& x, const T& y) {return x - y;});
       return *this;
@@ -385,7 +389,7 @@ namespace numerical {
     typename ColumnView<T>::iterator
     end(const ColumnView<T>& v)
     {
-      return v.data() + v.cols();
+      return v.data() + v.rows();
     }
 
     template <class T>
