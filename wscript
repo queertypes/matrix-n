@@ -80,7 +80,7 @@ def build(bld):
       libs += ['gsl', 'gslcblas']
 
     bld.program(source=path_join('tests', test),
-                cxxflags='-Wall -Wextra -g -O2 -std=c++0x',
+                cxxflags='-Wall -Wextra -gdwarf-4 -fvar-tracking-assignments -O0 -fno-inline -std=c++0x',
                 includes='include',
                 libpath='../lib',
                 lib=libs,
