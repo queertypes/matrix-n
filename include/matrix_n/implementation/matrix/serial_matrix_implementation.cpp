@@ -234,8 +234,6 @@ namespace numerical {
     SerialMatrixImplementation<T,
       _Alloc>::operator*=(const SerialMatrixImplementation<T, _Alloc>& rhs)
     {
-      assert(rhs.rows() == rows());
-      assert(rhs.cols() == cols());
       assert(cols() == rhs.rows());
 
       SerialMatrixImplementation<T, _Alloc> result(rows(), rhs.cols());
