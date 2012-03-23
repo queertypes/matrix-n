@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <cmath>
+
 namespace compchem {
   namespace impl {
 
@@ -22,48 +24,37 @@ namespace compchem {
               class _Det,
               class _Inv>
     _Mat
-    JustUpdateSlaterDeterminantImplementation<_Mat,
-      _Det,
-      _Inv>::operator()(const _Mat& D,
-                        const _Mat& V,
-                        const size_t numSteps,
-                        const double threshold)
+    JustUpdate<_Mat, _Det, _Inv>::operator()(const _Mat& D,
+                                             const _Mat& V,
+                                             const size_t numSteps,
+                                             const double threshold)
     {
       _Det det;
       _Inv inv;
 
-      _Mat result{D};
-      _Mat D_curr{D};
+      _Mat D_after(D);
+      _Mat D_curr(D);
       const size_t numElectrons = D.rows();
       size_t p = 0;
-      size_t step = 1;
+      size_t step = 0;
 
       while (step < numSteps) {
-        p = (++p % numElectrons);
+        p %= numElectrons;
 
-        //result(p,:) += V(step, :);
-        //result.row(p) += V.row(step);
-        for (size_t i = 0; i < result.cols(); ++i)
-          result(p,i) = V(step, i);
-
-        const double R = det(result) / det(D_curr);
+        D_after.row(p) += V.row(step);
+        const double R = det(D_after) / det(D_curr);
 
         if (abs(R) > threshold) {
-          //D_curr(p,:) = result(p,:);
-          //D_curr.row(p) = result.row(p);
-          for (size_t i = 0; i < D_curr.cols(); ++i)
-            D_curr(p,i) = result(p,i);
-
+          D_curr.row(p) = D_after.row(p);
           ++step;
         } else {
-          //result(p,:) = D_curr(p,:);
-          //result.row(p) = D_curr.row(p);
-          for (size_t i = 0; i < D_curr.cols(); ++i)
-            result(p,i) = D_curr(p,i);
+          D_after.row(p) = D_curr.row(p);
         }
+        
+        ++p;
       }
 
-      return result;
+      return D_after;
     }
   }
 }

@@ -22,8 +22,8 @@ namespace compchem {
   namespace impl {
 
     template <class Matrix, class Determinant, class Inverse>
-    class ShermanMorrison {
-      typedef Matrix matrux_type;
+    struct ShermanMorrison {
+      typedef Matrix matrix_type;
       typedef Determinant determinant_functor_type;
       typedef Inverse inverse_functor_type;
 

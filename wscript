@@ -97,8 +97,11 @@ def build(bld):
     if contains(test, 'gsl'):
       libs += ['gsl', 'gslcblas']
 
+    if contains(test, 'slater'):
+      libs += ['gsl', 'gslcblas']
+
     bld.program(source=path_join('tests', test),
-                cxxflags=FAST_TEST_FLAGS,
+                cxxflags=TEST_FLAGS,
                 includes='include',
                 libpath='../lib',
                 lib=libs,

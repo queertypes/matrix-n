@@ -24,7 +24,7 @@ namespace compchem {
     template <class Matrix,
               class Determinant,
               class Inverse>
-    struct JustUpdateSlaterDeterminantImplementation {
+    struct JustUpdate {
       typedef Matrix matrix_type;
       typedef Determinant determinant_functor_type;
       typedef Inverse inverse_functor_type;
