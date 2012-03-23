@@ -34,9 +34,9 @@ namespace compchem {
 
     SlaterDeterminant() = default;
     ~SlaterDeterminant() = default;
-    SlaterDeterminant(const SlaterDeterminant&) = delete;
-    SlaterDeterminant(SlaterDeterminant&&) = delete;
-    SlaterDeterminant& operator=(SlaterDeterminant) = delete;
+    SlaterDeterminant(const SlaterDeterminant&) = default;
+    SlaterDeterminant(SlaterDeterminant&&) = default;
+    SlaterDeterminant& operator=(const SlaterDeterminant&) = default;
 
     matrix_type
     operator()(const matrix_type& D,

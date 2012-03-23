@@ -22,7 +22,15 @@ namespace compchem {
   namespace impl {
 
     template <class Matrix, class Determinant, class Inverse>
-    class ShermanMorrison {};
+    class ShermanMorrison {
+      typedef Matrix matrux_type;
+      typedef Determinant determinant_functor_type;
+      typedef Inverse inverse_functor_type;
+
+      matrix_type
+      operator()(const matrix_type& D, const matrix_type& V,
+                 const size_t numSteps, const double threshold);
+    };
   }
 }
 
