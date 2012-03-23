@@ -15,3 +15,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef FAST_SLATER_COMPCHEM_SLATER_DETERMINANT_SHERMAN_MORRISON_HPP
+#define FAST_SLATER_COMPCHEM_SLATER_DETERMINANT_SHERMAN_MORRISON_HPP
+
+namespace compchem {
+  namespace impl {
+
+    template <class Matrix, class Determinant, class Inverse>
+    class ShermanMorrison {};
+  }
+}
+
+#include <fast_slater/implementation/slater_determinant/sherman_morrison.cpp>
+
+#endif

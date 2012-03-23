@@ -15,10 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef QMC_SLATER_HPP
-#define QMC_SLATER_HPP
+#ifndef FAST_SLATER_COMPCHEM_SLATER_DETERMINANT_HPP
+#define FAST_SLATER_COMPCHEM_SLATER_DETERMINANT_HPP
 
-namespace qmc {
+namespace compchem {
   template <class Matrix,
             class Determinant,
             class Inverse,
@@ -48,6 +48,6 @@ namespace qmc {
   };
 }
 
-#include <implementation/slater.cpp>
+#include <fast_slater/implementation/slater_determinant.cpp>
 
 #endif

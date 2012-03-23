@@ -15,27 +15,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef QMC_SLATER_JUST_UPDATE_SLATER_HPP
-#define QMC_SLATER_JUST_UPDATE_SLATER_HPP
+#ifndef FAST_SLATER_COMPCHEM_SLATER_DETERMINANT_NUKALA_KENT_HPP
+#define FAST_SLATER_COMPCHEM_SLATER_DETERMINANT_NUKALA_KENT_HPP
 
-namespace qmc {
+namespace compchem {
   namespace impl {
 
-    template <class Matrix,
-              class Determinant,
-              class Inverse>
-    struct JustUpdateSlaterDeterminantImplementation {
-      typedef Matrix matrix_type;
-      typedef Determinant determinant_functor_type;
-      typedef Inverse inverse_functor_type;
-
-      matrix_type
-      operator()(const matrix_type& D, const matrix_type& V,
-                 const size_t numSteps, const double threshold);
+    template <class Matrix, class Determinant, class Inverse>
+    class NukalaKent {
     };
   }
 }
 
-#include <implementation/slater/just_update_slater.cpp>
+#include <fast_slater/implementation/slater_determinant/nukala_kent.cpp>
 
 #endif
