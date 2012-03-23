@@ -1,5 +1,6 @@
  /*
     Fast Slater - algorithms for the computation of Slater determinants.
+    Copyright (C) Alejandro Cabrera 2012
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
