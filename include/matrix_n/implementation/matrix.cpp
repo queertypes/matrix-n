@@ -398,4 +398,67 @@ namespace numerical {
   {
     return lhs._impl == rhs._impl;
   }
+
+  namespace detail {
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const ColumnView<T>& lhs,
+              const RowView<T>& rhs)
+    {
+      Matrix<T, _Impl, _Alloc> result(lhs.rows(), rhs.cols());
+
+      for (size_t i = 0; i < result.rows(); ++i)
+        for (size_t j = 0; j < result.cols(); ++j)
+          for (size_t k = 0; k < lhs.rows(); ++k)
+            result(i,j) += lhs(k) * rhs(k);
+
+      return result;
+    }
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const RowView<T>& lhs,
+              const ColumnView<T>& rhs)
+    {
+      assert(lhs.cols() == rhs.rows());
+      Matrix<T, _Impl, _Alloc> result(1,1);
+
+      for (size_t k = 0; k < lhs.cols(); ++k)
+        result(0,0) += lhs(k) * rhs(k);
+
+      return result;
+    }
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const RowView<T>& view,
+              const Matrix<T, _Impl, _Alloc>& mat);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const ColumnView<T>& view,
+              const Matrix<T, _Impl, _Alloc>& mat);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const Matrix<T, _Impl, _Alloc>& mat,
+              const RowView<T>& view);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const Matrix<T, _Impl, _Alloc>& mat,
+              const ColumnView<T>& view);
+  }
 }

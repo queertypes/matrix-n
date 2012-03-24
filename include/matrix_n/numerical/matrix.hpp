@@ -184,6 +184,51 @@ namespace numerical {
   Matrix<T, _Impl, _Alloc>
   operator*(const T&,
             const Matrix<T, _Impl, _Alloc>&);
+
+
+  namespace detail {
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const ColumnView<T>& lhs,
+              const RowView<T>& rhs);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const RowView<T>& rhs,
+              const ColumnView<T>& lhs);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const RowView<T>& view,
+              const Matrix<T, _Impl, _Alloc>& mat);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const ColumnView<T>& view,
+              const Matrix<T, _Impl, _Alloc>& mat);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const Matrix<T, _Impl, _Alloc>& mat,
+              const RowView<T>& view);
+
+    template <class T,
+              template <class, class> class _Impl,
+              class _Alloc>
+    Matrix<T, _Impl, _Alloc>
+    operator*(const Matrix<T, _Impl, _Alloc>& mat,
+              const ColumnView<T>& view);
+  }
 }
 
 #include <matrix_n/implementation/matrix.cpp>
