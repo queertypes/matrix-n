@@ -238,6 +238,64 @@ TEST(test_matrix_view_ops, column_addition)
     EXPECT_FLOAT_EQ(*iter, 2.0d);
 }
 
+TEST(matrix_matrix_view_ops, column_row_multiply)
+{
+  MatrixType m = ones<MatrixType>(3);
+  RowType r = m.row(0);
+  ColumnType c = m.col(0);
+  MatrixType result = c * r;
+
+  for (const auto x : result)
+    EXPECT_FLOAT_EQ(x, 1.0d);
+}
+
+TEST(matrix_matrix_view_ops, row_column_multiply)
+{
+  MatrixType m = ones<MatrixType>(3);
+  RowType r = m.row(0);
+  ColumnType c = m.col(0);
+  MatrixType::value_type result = (r * c)(0,0);
+
+  EXPECT_FLOAT_EQ(result, 3.0d);
+}
+
+TEST(matrix_matrix_view_ops, row_matrix_multiply)
+{
+  MatrixType m = ones<MatrixType>(3);
+  MatrixType result = m.row(0) * m;
+
+  for (const auto x : result)
+    EXPECT_FLOAT_EQ(x, 3.0d);
+}
+
+TEST(matrix_matrix_view_ops, column_matrix_multiply)
+{
+  MatrixType m1 = ones<MatrixType>(1,3);
+  MatrixType m2 = ones<MatrixType>(3);
+  MatrixType result = m2.col(0) * m1;
+
+  for (const auto x : result)
+    EXPECT_FLOAT_EQ(x, 1.0d);
+}
+
+TEST(matrix_matrix_view_ops, matrix_row_multiply)
+{
+  MatrixType m1 = ones<MatrixType>(3,1);
+  MatrixType m2 = ones<MatrixType>(3);
+  MatrixType result = m1 * m2.row(0);
+
+  EXPECT_FLOAT_EQ(result(0,0), 3.0d);  
+}
+
+TEST(matrix_matrix_view_ops, matrix_column_multiply)
+{
+  MatrixType m = ones<MatrixType>(3);
+  MatrixType result = m * m.col(0);
+
+  for (const auto x : result)
+    EXPECT_FLOAT_EQ(x, 3.0d);
+}
+
 TEST(test_matrix_view_ops, column_subtraction)
 {
   MatrixType m1 = zeros<MatrixType>(2);
@@ -251,7 +309,7 @@ TEST(test_matrix_view_ops, column_subtraction)
     EXPECT_FLOAT_EQ(*iter, -1.0d);
 }
 
-TEST(test_matrix_assertions, row_assign_dim_mismatch)
+TEST(test_matrix_view_assertions, row_assign_dim_mismatch)
 {
   ::testing::FLAGS_gtest_death_test_style = "threadsafe";
   MatrixType m1(2);
@@ -260,7 +318,7 @@ TEST(test_matrix_assertions, row_assign_dim_mismatch)
   EXPECT_DEATH(m1.row(0) = m2.row(0), "");
 }
 
-TEST(test_matrix_assertions, row_add_assign_dim_mismatch)
+TEST(test_matrix_view_assertions, row_add_assign_dim_mismatch)
 {
   ::testing::FLAGS_gtest_death_test_style = "threadsafe";
   MatrixType m1(2);
@@ -269,7 +327,7 @@ TEST(test_matrix_assertions, row_add_assign_dim_mismatch)
   EXPECT_DEATH(m1.row(0) += m2.row(0), "");
 }
 
-TEST(test_matrix_assertions, col_assign_dim_mismatch)
+TEST(test_matrix_view_assertions, col_assign_dim_mismatch)
 {
   ::testing::FLAGS_gtest_death_test_style = "threadsafe";
   MatrixType m1(2);
@@ -278,7 +336,7 @@ TEST(test_matrix_assertions, col_assign_dim_mismatch)
   EXPECT_DEATH(m1.col(0) = m2.col(0), "");
 }
 
-TEST(test_matrix_assertions, col_add_assign_dim_mismatch)
+TEST(test_matrix_view_assertions, col_add_assign_dim_mismatch)
 {
   ::testing::FLAGS_gtest_death_test_style = "threadsafe";
   MatrixType m1(2);
@@ -287,13 +345,57 @@ TEST(test_matrix_assertions, col_add_assign_dim_mismatch)
   EXPECT_DEATH(m1.col(0) += m2.col(0), "");
 }
 
-TEST(test_matrix_assertions, col_subtract_assign_dim_mismatch)
+TEST(test_matrix_view_assertions, col_subtract_assign_dim_mismatch)
 {
   ::testing::FLAGS_gtest_death_test_style = "threadsafe";
   MatrixType m1(2);
   MatrixType m2(3);
 
   EXPECT_DEATH(m1.col(0) -= m2.col(0), "");
+}
+
+TEST(test_matrix_view_assertions, row_col_multiply_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2,3);
+  EXPECT_DEATH(m1.row(0) * m1.col(0), "");
+}
+
+TEST(test_matrix_view_assertions, col_row_multiply_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(2,3);
+  EXPECT_DEATH(m1.col(0) * m1.row(0), "");
+}
+
+TEST(test_matrix_view_assertions, row_mat_multiply_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(1,1);
+  MatrixType m2(2,2);
+  EXPECT_DEATH(m2.row(0) * m1, "");
+}
+
+TEST(test_matrix_view_assertions, col_mat_multiply_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m1(3,1);
+  MatrixType m2(2,2);
+  EXPECT_DEATH(m2.col(0) * m1, "");
+}
+
+TEST(test_matrix_view_assertions, mat_row_multiply_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m(2,3);
+  EXPECT_DEATH(m * m.row(0), "");
+}
+
+TEST(test_matrix_view_assertions, mat_col_multiply_dim_mismatch)
+{
+  ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+  MatrixType m(1,3);
+  EXPECT_DEATH(m * m.col(0), "");
 }
 
 int main(int argc, char **argv)

@@ -40,16 +40,16 @@ namespace compchem {
       while (step < numSteps) {
         p %= numElectrons;
         
-        _Mat Vrow(1, V.cols());
-        _Mat iDcol(D.rows(), 1);
+        //_Mat Vrow(1, V.cols());
+        //_Mat iDcol(D.rows(), 1);
 
-        Vrow.row(0) = V.row(step);
-        iDcol.col(0) = iD.col(p);
+        //Vrow.row(0) = V.row(step);
+        //iDcol.col(0) = iD.col(p);
 
-        const double R = (1.0d + (Vrow * iDcol))(0,0);
+        const double R = (1.0d + (V.row(step) * iD.col(p)))(0,0);
         
         if (abs(R) > threshold) {
-          iD -= ((iDcol * (Vrow * iD)) / R);
+          iD -= ((iD.col(p) * (V.row(step) * iD)) / R);
           ++step;
         }
 

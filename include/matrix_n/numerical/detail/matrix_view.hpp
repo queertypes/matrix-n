@@ -211,6 +211,24 @@ namespace numerical {
 
     template <class T>
     ColumnView<T> operator-(const ColumnView<T>&, const ColumnView<T>&);
+
+    template <class T, class Matrix>
+    Matrix operator*(const ColumnView<T>& lhs, const RowView<T>& rhs);
+
+    template <class T, class Matrix>
+    Matrix operator*(const RowView<T>& rhs, const ColumnView<T>& lhs);
+
+    template <class T, class Matrix>
+    Matrix operator*(const RowView<T>& view, const Matrix& mat);
+
+    template <class T, class Matrix>
+    Matrix operator*(const ColumnView<T>& view, const Matrix& mat);
+
+    template <class T, class Matrix>
+    Matrix operator*(const Matrix& mat, const RowView<T>& view);
+
+    template <class T, class Matrix>
+    Matrix operator*(const Matrix& mat, const ColumnView<T>& view);
   }
 }
 
