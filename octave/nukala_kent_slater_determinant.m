@@ -4,7 +4,7 @@ function determinant = nukala_kent_slater_determinant(D, V, num_steps,
   # Initialization
   num_electrons = rows(D);
   p = 0;
-  gamma_var = zeros(num_steps);
+  gamma_var = zeros(1, num_steps);
   U = zeros(num_electrons, num_steps);
 	I = eye(num_electrons, num_electrons);
   step = 1;
