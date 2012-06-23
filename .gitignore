@@ -6,3 +6,16 @@ include/config.h
 waf
 TAGS
 /include/implementation/.#matrix.cpp
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
