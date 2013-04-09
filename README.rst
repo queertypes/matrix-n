@@ -1,6 +1,6 @@
-========
+****
 Matrix N
-========
+****
 
 Matrix N is a generic C++ linear algebra library freely available under the 3-clause BSD license_.
 
@@ -10,9 +10,9 @@ Matrix N is a generic C++ linear algebra library freely available under the 3-cl
 .. _uBLAS: http://www.boost.org/doc/libs/1_53_0/libs/numeric/ublas/doc/index.htm
 .. _license: http://opensource.org/licenses/BSD-3-Clause
 
-----
+====
 Building
-----
+====
 
 .. code-block:: bash
 
@@ -35,9 +35,9 @@ should be used. In particular, the following features are important:
 - std::move support
 - <chrono>
 
-----
+====
 Overview
-----
+====
 
 Project structure:
 
@@ -75,8 +75,8 @@ Objects with multiple implementations:
 - determinant
 - inversion
 
-----
+====
 Contributing
-----
+====
 
 Note this package is no longer maintained. If you have any questions, feel free to direct them to Alejandro Cabrera <cpp.cabrera@gmail.com>.
