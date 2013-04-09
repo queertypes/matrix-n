@@ -31,16 +31,16 @@ Building
 For a successful build, a compiler supporting recent c++11 features 
 should be used. In particular, the following features are important:
 
-    - rvalue references
-    - std::move support
-    - <chrono>
+- rvalue references
+- std::move support
+- <chrono>
 
 
 ====
 Overview
 ====
 
-Project structure:
+Project structure::
 
     - numerical
         * matrix interface
@@ -54,7 +54,7 @@ Project structure:
     - src
         * drivers and applications
 
-Planned implementations:
+Planned implementations::
 
     - serial
     - serial-simd
@@ -65,12 +65,12 @@ Planned implementations:
         * OpenCL
     - hybrid
 
-Targets:
+Targets::
 
     - x86 (primary)
     - ARM (secondary)
 
-Objects with multiple implementations:
+Objects with multiple implementations::
 
     - matrix
     - determinant
