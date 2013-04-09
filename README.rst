@@ -31,9 +31,10 @@ Building
 For a successful build, a compiler supporting recent c++11 features 
 should be used. In particular, the following features are important:
 
-- rvalue references
-- std::move support
-- <chrono>
+    - rvalue references
+    - std::move support
+    - <chrono>
+
 
 ====
 Overview
@@ -41,39 +42,39 @@ Overview
 
 Project structure:
 
-- numerical
-    * matrix interface
-    * matrix generation
-    * detail
-        - matrix implementation interfaces
-- implementation
-    * implementation of generator and matrix interfaces
-    * detail
-        - implementation of compute classes
-- src
-    * drivers and applications
+    - numerical
+        * matrix interface
+        * matrix generation
+        * detail
+            - matrix implementation interfaces
+    - implementation
+        * implementation of generator and matrix interfaces
+        * detail
+            - implementation of compute classes
+    - src
+        * drivers and applications
 
 Planned implementations:
 
-- serial
-- serial-simd
-- parallel
-- parallel-simd
-- gpu
-    * CUDA
-    * OpenCL
-- hybrid
+    - serial
+    - serial-simd
+    - parallel
+    - parallel-simd
+    - gpu
+        * CUDA
+        * OpenCL
+    - hybrid
 
 Targets:
 
-- x86 (primary)
-- ARM (secondary)
+    - x86 (primary)
+    - ARM (secondary)
 
 Objects with multiple implementations:
 
-- matrix
-- determinant
-- inversion
+    - matrix
+    - determinant
+    - inversion
 
 ====
 Contributing
