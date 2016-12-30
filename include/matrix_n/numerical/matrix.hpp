@@ -1,6 +1,6 @@
  /*
   Matrix N - generic matrix library offering compile-time implementation choices
-  Copyright (C) 2012 Alejandro Cabrera
+  Copyright (C) 2016 Allele Dev
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

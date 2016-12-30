@@ -80,4 +80,4 @@ Objects with multiple implementations::
 Contributing
 ====
 
-Note this package is no longer maintained. If you have any questions, feel free to direct them to Alejandro Cabrera <cpp.cabrera@gmail.com>.
+Note this package is no longer maintained. If you have any questions, feel free to direct them to Allele Dev <allele.dev@gmail.com>.
